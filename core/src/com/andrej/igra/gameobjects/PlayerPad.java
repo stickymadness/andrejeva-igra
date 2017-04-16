@@ -8,12 +8,12 @@ import com.badlogic.gdx.math.Vector2;
  * Created by Tomaž Ravljen, Drugi Vid d.o.o.
  */
 
-public class Player extends AbstractGameObject {
+public class PlayerPad extends AbstractGameObject {
 
     private Vector2 terminalVelocity;
     private Texture sprite;
 
-    public Player() {
+    public PlayerPad() {
         sprite = new Texture("platform.png");
         dimension.set(14f, 3.6f);
         terminalVelocity = new Vector2(12, 0);
