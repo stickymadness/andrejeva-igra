@@ -62,7 +62,7 @@ public class Level {
     private void createBall() {
         ball = new Ball();
         ball.position.set(playerPad.position.x + playerPad.dimension.x / 2,
-                playerPad.position.y + playerPad.dimension.y * .85f);
+                playerPad.position.y + playerPad.dimension.y);
     }
 
     private void createPlayer() {
@@ -82,6 +82,7 @@ public class Level {
 
     public void update(float delta) {
         playerPad.update(delta);
+        ball.update(delta);
     }
 
     public void render(SpriteBatch batch) {
