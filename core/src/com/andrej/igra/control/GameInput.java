@@ -19,9 +19,9 @@ public class GameInput implements InputProcessor {
     public boolean keyDown(int keycode) {
 
         if (Input.Keys.LEFT == keycode) {
-            worldController.level.player.setDirectionLeft();
+            worldController.level.playerPad.setDirectionLeft();
         } else if (Input.Keys.RIGHT == keycode) {
-            worldController.level.player.setDirectionRight();
+            worldController.level.playerPad.setDirectionRight();
         }
 
         return false;
@@ -39,6 +39,11 @@ public class GameInput implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+
+        if (!worldController.hasGameStarted()) {
+            worldController.start();
+        }
+
         return false;
     }
 

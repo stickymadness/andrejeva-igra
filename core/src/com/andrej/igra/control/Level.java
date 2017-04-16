@@ -2,8 +2,9 @@ package com.andrej.igra.control;
 
 import com.andrej.igra.Constants;
 import com.andrej.igra.Utils;
+import com.andrej.igra.gameobjects.Ball;
 import com.andrej.igra.gameobjects.Block;
-import com.andrej.igra.gameobjects.Player;
+import com.andrej.igra.gameobjects.PlayerPad;
 import com.andrej.igra.gameobjects.HorizontalBorder;
 import com.andrej.igra.gameobjects.TopBorder;
 import com.badlogic.gdx.Gdx;
@@ -41,8 +42,10 @@ public class Level {
         }
     }
 
+    public PlayerPad playerPad;
+    public Ball ball;
     public ArrayList<Block> blocks;
-    public Player player;
+
     public TopBorder topBorder;
     public HorizontalBorder leftBorder;
     public HorizontalBorder rightBorder;
@@ -52,12 +55,19 @@ public class Level {
 
         load("level00.png");
         createPlayer();
+        createBall();
         buildWalls();
     }
 
+    private void createBall() {
+        ball = new Ball();
+        ball.position.set(playerPad.position.x + playerPad.dimension.x / 2,
+                playerPad.position.y + playerPad.dimension.y);
+    }
+
     private void createPlayer() {
-        player = new Player();
-        player.position.set(Constants.GAME_WIDTH / 2 - player.dimension.x / 2, 2);
+        playerPad = new PlayerPad();
+        playerPad.position.set(Constants.GAME_WIDTH / 2 - playerPad.dimension.x / 2, 2);
     }
 
     private void buildWalls() {
@@ -71,7 +81,8 @@ public class Level {
     }
 
     public void update(float delta) {
-        player.update(delta);
+        playerPad.update(delta);
+        ball.update(delta);
     }
 
     public void render(SpriteBatch batch) {
@@ -84,7 +95,8 @@ public class Level {
             block.render(batch);
         }
 
-        player.render(batch);
+        playerPad.render(batch);
+        ball.render(batch);
     }
 
     private void load(String filePath) {
