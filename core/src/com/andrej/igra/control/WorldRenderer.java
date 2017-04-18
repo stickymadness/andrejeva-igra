@@ -4,6 +4,7 @@ import com.andrej.igra.Constants;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 
 /**
  * Created by Tomaž Ravljen, Drugi Vid d.o.o.
@@ -14,6 +15,7 @@ public class WorldRenderer {
     private SpriteBatch batch;
     private WorldController worldController;
     private OrthographicCamera camera;
+    private Box2DDebugRenderer b2debugRenderer;
 
     public WorldRenderer(WorldController worldController) {
         batch = new SpriteBatch();
@@ -21,6 +23,7 @@ public class WorldRenderer {
 
         setupCamera();
         batch.setProjectionMatrix(camera.combined);
+        b2debugRenderer = new Box2DDebugRenderer();
     }
 
     private void setupCamera() {
@@ -38,7 +41,7 @@ public class WorldRenderer {
         batch.begin();
 
         worldController.level.render(batch);
-
+//        b2debugRenderer.render(worldController.box2dWorld, batch.getProjectionMatrix());
         batch.end();
     }
 }

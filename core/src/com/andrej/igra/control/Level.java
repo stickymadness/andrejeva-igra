@@ -10,6 +10,7 @@ import com.andrej.igra.gameobjects.TopBorder;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.physics.box2d.World;
 
 import java.util.ArrayList;
 
@@ -50,8 +51,11 @@ public class Level {
     public HorizontalBorder leftBorder;
     public HorizontalBorder rightBorder;
 
-    public Level() {
-        blocks = new ArrayList<Block>();
+    private World world;
+
+    public Level(World world) {
+        this.blocks = new ArrayList<Block>();
+        this.world = world;
 
         load("level00.png");
         createPlayer();
@@ -61,13 +65,13 @@ public class Level {
 
     private void createBall() {
         ball = new Ball();
-        ball.position.set(playerPad.position.x + playerPad.dimension.x / 2,
-                playerPad.position.y + playerPad.dimension.y);
+        ball.initBody(world);
+        respawnBall();
     }
 
     private void createPlayer() {
         playerPad = new PlayerPad();
-        playerPad.position.set(Constants.GAME_WIDTH / 2 - playerPad.dimension.x / 2, 2);
+        centerPlayerPad();
     }
 
     private void buildWalls() {
@@ -116,6 +120,7 @@ public class Level {
                     case BLOCK:
                         block = new Block();
                         block.position.set(x * ratioX, invertedY);
+                        block.initBody(world);
                         blocks.add(block);
                         break;
 
@@ -129,5 +134,25 @@ public class Level {
                 }
             }
         }
+    }
+
+    boolean isGameOver() {
+        return ball.isOffScreen();
+    }
+
+    void restart() {
+        centerPlayerPad();
+        respawnBall();
+    }
+
+    private void centerPlayerPad() {
+        playerPad.position.set(Constants.GAME_WIDTH / 2 - playerPad.dimension.x / 2, 2);
+        playerPad.velocity.set(0, 0);
+    }
+
+    private void respawnBall() {
+        ball.position.set(playerPad.position.x + playerPad.dimension.x / 2,
+                playerPad.position.y + playerPad.dimension.y);
+        ball.velocity.set(0, 0);
     }
 }

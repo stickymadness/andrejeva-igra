@@ -1,5 +1,8 @@
 package com.andrej.igra.control;
 
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
+
 /**
  * Created by Tomaž Ravljen, Drugi Vid d.o.o.
  */
@@ -8,17 +11,22 @@ public class WorldController {
     public static WorldController shared;
 
     Level level;
+    World box2dWorld;
 
     private boolean hasStarted;
 
     public WorldController() {
         shared = this;
         hasStarted = false;
-        level = new Level();
+        box2dWorld = new World(new Vector2(), false);
+        level = new Level(box2dWorld);
     }
 
     public void update(float deltaTime) {
 
+        if (level.isGameOver()) {
+            restart();
+        }
         level.update(deltaTime);
     }
 
@@ -26,12 +34,17 @@ public class WorldController {
         shared = null;
     }
 
-    public boolean hasGameStarted() {
+    boolean hasGameStarted() {
         return hasStarted;
     }
 
-    public void start() {
+    void start() {
         hasStarted = true;
         level.ball.velocity.set(0, level.ball.terminalVelocity.y);
+    }
+
+    void restart() {
+        hasStarted = false;
+        level.restart();
     }
 }
