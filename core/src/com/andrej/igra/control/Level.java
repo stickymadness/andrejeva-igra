@@ -155,12 +155,7 @@ public class Level {
                         blocks.add(block);
                         break;
 
-                    case WALL:
-//                        Gdx.app.error("Level", "WALL");
-                        break;
-
                     case EMPTY:
-//                        Gdx.app.error("Level", "EMPTY");
                         break;
                 }
             }
