@@ -54,23 +54,25 @@ public class WorldListener implements ContactListener {
             Gdx.app.error(TAG, "Contact objects: " + obj1.getClass().getSimpleName() + ", " + obj2.getClass().getSimpleName());
 
             if (obj2 instanceof Block || obj1 instanceof Block) {
+
                 Ball ball = (Ball)(obj1 instanceof Ball ? obj1 : obj2);
                 Block block = (Block)(obj1 instanceof Block ? obj1 : obj2);
                 worldController.level.destroy(block);
                 ball.bounceFrom(block);
-                Gdx.app.error(TAG, "bounceBack");
 
-            } else if(obj1 instanceof PlayerPad || obj2 instanceof PlayerPad) {
+            } else if (obj1 instanceof PlayerPad || obj2 instanceof PlayerPad) {
+
                 Ball ball = (Ball)(obj1 instanceof Ball ? obj1 : obj2);
                 PlayerPad pad = (PlayerPad)(obj1 instanceof PlayerPad ? obj1 : obj2);
-                ball.velocity.x = pad.velocity.x / 2 + ball.velocity.x;
-                ball.bounceBack();
+                ball.bounceFrom(pad);
 
-            } else if(obj1 instanceof TopBorder || obj2 instanceof TopBorder) {
+            } else if (obj1 instanceof TopBorder || obj2 instanceof TopBorder) {
+
                 Ball ball = (Ball)(obj1 instanceof Ball ? obj1 : obj2);
                 ball.bounceVertical();
 
-            } else if(obj1 instanceof HorizontalBorder || obj2 instanceof HorizontalBorder) {
+            } else if (obj1 instanceof HorizontalBorder || obj2 instanceof HorizontalBorder) {
+
                 Ball ball = (Ball)(obj1 instanceof Ball ? obj1 : obj2);
                 ball.bounceHorizontal();
             }
@@ -78,17 +80,11 @@ public class WorldListener implements ContactListener {
     }
 
     @Override
-    public void endContact(Contact contact) {
-//        Gdx.app.error(TAG, "endContact");
-    }
+    public void endContact(Contact contact) {}
 
     @Override
-    public void preSolve(Contact contact, Manifold oldManifold) {
-//        Gdx.app.error(TAG, "preSolve");
-    }
+    public void preSolve(Contact contact, Manifold oldManifold) {}
 
     @Override
-    public void postSolve(Contact contact, ContactImpulse impulse) {
-//        Gdx.app.error(TAG, "postSolve");
-    }
+    public void postSolve(Contact contact, ContactImpulse impulse) {}
 }

@@ -27,7 +27,7 @@ public class WorldController {
 
     public void update(float deltaTime) {
 
-        if (level.isGameOver()) {
+        if (level.isGameOver() || level.isGameComplete()) {
             restart();
         }
 

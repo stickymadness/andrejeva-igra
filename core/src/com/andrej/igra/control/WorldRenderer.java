@@ -39,7 +39,7 @@ public class WorldRenderer {
         batch.begin();
 
         worldController.level.render(batch);
-        b2debugRenderer.render(worldController.box2dWorld, batch.getProjectionMatrix());
+//        b2debugRenderer.render(worldController.box2dWorld, batch.getProjectionMatrix());
 
         batch.end();
     }

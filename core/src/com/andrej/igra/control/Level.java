@@ -10,7 +10,6 @@ import com.andrej.igra.gameobjects.TopBorder;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 
 import java.util.ArrayList;
@@ -49,6 +48,7 @@ public class Level {
     public PlayerPad playerPad;
     public Ball ball;
     public ArrayList<Block> blocks;
+    public ArrayList<Block> levelBlocks;
 
     public TopBorder topBorder;
     public HorizontalBorder leftBorder;
@@ -58,6 +58,7 @@ public class Level {
 
     public Level(World world) {
         this.blocks = new ArrayList<Block>();
+        this.levelBlocks = new ArrayList<Block>();
         this.destroyBlocks = new ArrayList<Block>();
         this.world = world;
 
@@ -149,6 +150,8 @@ public class Level {
                         block = new Block();
                         block.position.set(x * ratioX, invertedY);
                         block.initBody(world);
+
+                        levelBlocks.add(block);
                         blocks.add(block);
                         break;
 
@@ -171,6 +174,7 @@ public class Level {
     void restart() {
         centerPlayerPad();
         respawnBall();
+        respawnBlocks();
     }
 
     private void centerPlayerPad() {
@@ -184,7 +188,20 @@ public class Level {
         ball.velocity.set(0, 0);
     }
 
-    public void destroy(Block block) {
+    private void respawnBlocks() {
+        blocks.clear();
+        blocks.addAll(levelBlocks);
+
+        for (Block block: blocks) {
+            block.initBody(world);
+        }
+    }
+
+    void destroy(Block block) {
         destroyBlocks.add(block);
+    }
+
+    public boolean isGameComplete() {
+        return blocks.size() == 0;
     }
 }

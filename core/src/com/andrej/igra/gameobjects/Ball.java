@@ -1,6 +1,5 @@
 package com.andrej.igra.gameobjects;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -9,9 +8,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.MassData;
 import com.badlogic.gdx.physics.box2d.World;
 
 /**
@@ -20,7 +16,7 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class Ball extends AbstractGameObject {
     private static final String TAG = Ball.class.getSimpleName();
-    private static final float MIN_BOUNCE_DELAY = .1f;
+    private static final float MAX_BOUNCE_DELAY = .1f;
 
     public Vector2 terminalVelocity;
     public Vector2 bodyPosition;
@@ -31,7 +27,7 @@ public class Ball extends AbstractGameObject {
 
     public Ball() {
         sprite = new TextureRegion(new Texture("ball.png"));
-        terminalVelocity = new Vector2(18f, 18f);
+        terminalVelocity = new Vector2(20f, 20f);
         dimension.set(3f, 3f);
         bodyPosition = new Vector2();
     }
@@ -48,7 +44,7 @@ public class Ball extends AbstractGameObject {
         bodyDef.active = true;
 
         CircleShape circle = new CircleShape();
-        circle.setRadius(dimension.x / 2);
+        circle.setRadius(dimension.x * .45f);
 
         body = world.createBody(bodyDef);
         body.setUserData(this);
@@ -75,9 +71,13 @@ public class Ball extends AbstractGameObject {
         }
 
         if (body != null) {
-            bodyPosition.set(position.x, position.y + dimension.y / 2);
+            setBodyPosition();
             body.setTransform(bodyPosition.x, bodyPosition.y, rotation);
         }
+    }
+
+    private void setBodyPosition() {
+        bodyPosition.set(position.x + dimension.x / 2, position.y + dimension.y / 2);
     }
 
     public boolean isOffScreen() {
@@ -92,7 +92,7 @@ public class Ball extends AbstractGameObject {
 
         if (canBounce()) {
             velocity.x *= -1;
-            bounceDelay = MIN_BOUNCE_DELAY;
+            bounceDelay = MAX_BOUNCE_DELAY;
         }
     }
 
@@ -100,7 +100,7 @@ public class Ball extends AbstractGameObject {
 
         if (canBounce()) {
             velocity.set(velocity.x * -1, velocity.y * -1);
-            bounceDelay = MIN_BOUNCE_DELAY;
+            bounceDelay = MAX_BOUNCE_DELAY;
         }
     }
 
@@ -112,10 +112,13 @@ public class Ball extends AbstractGameObject {
     }
 
     public void bounceVertical() {
+        velocity.y *= -1;
+    }
 
-        if (canBounce()) {
-            velocity.y *= -1;
-            bounceDelay = MIN_BOUNCE_DELAY;
-        }
+    public void bounceFrom(PlayerPad pad) {
+        velocity.set(
+                pad.velocity.x / 2 + velocity.x / 2,
+                velocity.y * -1
+        );
     }
 }

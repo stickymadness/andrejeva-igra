@@ -51,13 +51,11 @@ public class GameScreen extends ScreenAdapter {
 
     @Override
     public void pause() {
-        // TODO: Pause game
         worldController.pause();
     }
 
     @Override
     public void resume() {
-        // TODO: Resume game
         worldController.resume();
     }
 }
