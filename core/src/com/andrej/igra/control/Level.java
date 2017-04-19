@@ -10,6 +10,7 @@ import com.andrej.igra.gameobjects.TopBorder;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 
 import java.util.ArrayList;
@@ -43,6 +44,8 @@ public class Level {
         }
     }
 
+    private ArrayList<Block> destroyBlocks;
+
     public PlayerPad playerPad;
     public Ball ball;
     public ArrayList<Block> blocks;
@@ -55,38 +58,63 @@ public class Level {
 
     public Level(World world) {
         this.blocks = new ArrayList<Block>();
+        this.destroyBlocks = new ArrayList<Block>();
         this.world = world;
 
         load("level00.png");
-        createPlayer();
+        createPlayerPad();
         createBall();
         buildWalls();
     }
 
     private void createBall() {
         ball = new Ball();
-        ball.initBody(world);
         respawnBall();
+        ball.initBody(world);
     }
 
-    private void createPlayer() {
+    private void createPlayerPad() {
         playerPad = new PlayerPad();
         centerPlayerPad();
+        playerPad.initBody(world);
     }
 
     private void buildWalls() {
         topBorder = new TopBorder();
         topBorder.position.set(topBorder.dimension.y / 2,
                 Utils.getGameHeight() - topBorder.dimension.y);
+        topBorder.initBody(world);
+
         leftBorder = new HorizontalBorder();
+        leftBorder.initBody(world);
+
         rightBorder = new HorizontalBorder();
         rightBorder.scale.x = -1;
         rightBorder.position.set(Constants.GAME_WIDTH - rightBorder.dimension.x, 0);
+        rightBorder.initBody(world);
     }
 
     public void update(float delta) {
         playerPad.update(delta);
         ball.update(delta);
+        world.step(delta, 1, 1);
+        sweepTheDead();
+    }
+
+    private void sweepTheDead() {
+        if (world.isLocked()) {
+            return;
+        }
+
+        for (Block block: destroyBlocks) {
+            world.destroyBody(block.body);
+            blocks.remove(block);
+
+            block.body.setUserData(null);
+            block.body = null;
+        }
+
+        destroyBlocks.clear();
     }
 
     public void render(SpriteBatch batch) {
@@ -154,5 +182,9 @@ public class Level {
         ball.position.set(playerPad.position.x + playerPad.dimension.x / 2,
                 playerPad.position.y + playerPad.dimension.y);
         ball.velocity.set(0, 0);
+    }
+
+    public void destroy(Block block) {
+        destroyBlocks.add(block);
     }
 }

@@ -29,7 +29,6 @@ public class WorldRenderer {
     private void setupCamera() {
         float width = Constants.GAME_WIDTH;
         float height = width * (Gdx.graphics.getHeight() / (float)Gdx.graphics.getWidth());
-//        float height = Constants.GAME_HEIGHT;
 
         camera = new OrthographicCamera(width, height);
         camera.translate(width / 2, height / 2);
@@ -37,11 +36,11 @@ public class WorldRenderer {
     }
 
     public void render() {
-
         batch.begin();
 
         worldController.level.render(batch);
-//        b2debugRenderer.render(worldController.box2dWorld, batch.getProjectionMatrix());
+        b2debugRenderer.render(worldController.box2dWorld, batch.getProjectionMatrix());
+
         batch.end();
     }
 }

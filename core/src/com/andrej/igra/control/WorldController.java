@@ -1,5 +1,6 @@
 package com.andrej.igra.control;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
@@ -10,15 +11,15 @@ import com.badlogic.gdx.physics.box2d.World;
 public class WorldController {
     public static WorldController shared;
 
-    Level level;
-    World box2dWorld;
+    public Level level;
+    public World box2dWorld;
 
     private boolean hasStarted;
 
     public WorldController() {
         shared = this;
         hasStarted = false;
-        box2dWorld = new World(new Vector2(), false);
+        box2dWorld = new World(new Vector2(), true);
         level = new Level(box2dWorld);
     }
 
