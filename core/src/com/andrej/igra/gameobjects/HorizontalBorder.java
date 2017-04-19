@@ -5,7 +5,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.World;
 
 /**
  * Created by Tomaž Ravljen, Drugi Vid d.o.o.
@@ -16,8 +21,7 @@ public class HorizontalBorder extends AbstractGameObject {
     private TextureRegion borderLeft;
     private TextureRegion borderRight;
     private Vector2 rightDimension;
-
-    public Vector2 scale;
+    private Body body;
 
     public HorizontalBorder() {
         float ratio = Gdx.graphics.getHeight() / (float)Gdx.graphics.getWidth();
@@ -31,12 +35,43 @@ public class HorizontalBorder extends AbstractGameObject {
         dimension.y -= 2.5f * .7f;
 
         origin.set(dimension.x / 2, dimension.y / 2);
-        scale = new Vector2(1, 1);
     }
 
     @Override
     public void render(SpriteBatch batch) {
+        // Reposition body
+        if (body != null) {
+            body.setTransform(getCenter(), rotation);
+        }
+
         batch.draw(borderLeft, position.x, position.y, origin.x, origin.y, dimension.x, dimension.y, scale.x, scale.y, rotation);
         batch.draw(borderRight, position.x, position.y, origin.x, origin.y, rightDimension.x, rightDimension.y, scale.x, scale.y, rotation);
+    }
+
+    public void initBody(World world) {
+        if (body != null) {
+            return;
+        }
+
+        Vector2 center = new Vector2();
+        center.set(0, 0);
+
+        PolygonShape polyShape = new PolygonShape();
+        polyShape.setAsBox(
+                dimension.x * .5f,
+                dimension.y * .6f,
+                center,
+                rotation * MathUtils.degRad
+        );
+
+        BodyDef boxBodyDef = new BodyDef();
+        boxBodyDef.type = BodyDef.BodyType.StaticBody;
+
+        body = world.createBody(boxBodyDef);
+        body.createFixture(polyShape, 1);
+        body.setUserData(this);
+        body.getPosition().set(position);
+
+        polyShape.dispose();
     }
 }
