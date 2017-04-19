@@ -107,7 +107,7 @@ public class Ball extends AbstractGameObject {
     public void bounceFrom(Block block) {
 
         if (canBounce()) {
-
+            // TODO: Bounce from block, depending on which side you are you need to send it in according direction
         }
     }
 

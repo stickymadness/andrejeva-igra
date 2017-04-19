@@ -15,8 +15,10 @@ public class WorldController {
     public World box2dWorld;
 
     private boolean hasStarted;
+    private boolean isRunning;
 
     public WorldController() {
+        isRunning = true;
         shared = this;
         hasStarted = false;
         box2dWorld = new World(new Vector2(), true);
@@ -28,7 +30,10 @@ public class WorldController {
         if (level.isGameOver()) {
             restart();
         }
-        level.update(deltaTime);
+
+        if (isRunning) {
+            level.update(deltaTime);
+        }
     }
 
     public void dispose() {
@@ -47,5 +52,13 @@ public class WorldController {
     void restart() {
         hasStarted = false;
         level.restart();
+    }
+
+    public void pause() {
+        isRunning = false;
+    }
+
+    public void resume() {
+        isRunning = true;
     }
 }
