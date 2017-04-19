@@ -1,7 +1,6 @@
 package com.andrej.igra.control;
 
 import com.andrej.igra.Constants;
-import com.andrej.igra.Utils;
 import com.andrej.igra.gameobjects.PlayerPad;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;

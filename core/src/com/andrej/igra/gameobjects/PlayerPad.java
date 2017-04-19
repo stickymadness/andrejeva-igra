@@ -3,7 +3,6 @@ package com.andrej.igra.gameobjects;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -32,8 +31,6 @@ public class PlayerPad extends AbstractGameObject {
         }
 
         Vector2 center = new Vector2(dimension.x / 2, dimension.y * .1f);
-//        center.set(position.x + dimension.x / 2, position.y + dimension.y / 2);
-
         PolygonShape polyShape = new PolygonShape();
         polyShape.setAsBox(
                 dimension.x * .42f,
