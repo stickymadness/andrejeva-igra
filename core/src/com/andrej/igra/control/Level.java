@@ -4,7 +4,7 @@ import com.andrej.igra.Constants;
 import com.andrej.igra.Utils;
 import com.andrej.igra.gameobjects.Ball;
 import com.andrej.igra.gameobjects.Block;
-import com.andrej.igra.gameobjects.HorizontalBorder;
+import com.andrej.igra.gameobjects.VerticalBorder;
 import com.andrej.igra.gameobjects.PlayerPad;
 import com.andrej.igra.gameobjects.TopBorder;
 import com.badlogic.gdx.Gdx;
@@ -51,8 +51,8 @@ public class Level {
     public ArrayList<Block> levelBlocks;
 
     public TopBorder topBorder;
-    public HorizontalBorder leftBorder;
-    public HorizontalBorder rightBorder;
+    public VerticalBorder leftBorder;
+    public VerticalBorder rightBorder;
 
     private World world;
 
@@ -86,10 +86,10 @@ public class Level {
                 Utils.getGameHeight() - topBorder.dimension.y);
         topBorder.initBody(world);
 
-        leftBorder = new HorizontalBorder();
+        leftBorder = new VerticalBorder();
         leftBorder.initBody(world);
 
-        rightBorder = new HorizontalBorder();
+        rightBorder = new VerticalBorder();
         rightBorder.scale.x = -1;
         rightBorder.position.set(Constants.GAME_WIDTH - rightBorder.dimension.x, 0);
         rightBorder.initBody(world);

@@ -89,19 +89,7 @@ public class Ball extends AbstractGameObject {
     }
 
     public void bounceHorizontal() {
-
-        if (canBounce()) {
-            velocity.x *= -1;
-            bounceDelay = MAX_BOUNCE_DELAY;
-        }
-    }
-
-    public void bounceBack() {
-
-        if (canBounce()) {
-            velocity.set(velocity.x * -1, velocity.y * -1);
-            bounceDelay = MAX_BOUNCE_DELAY;
-        }
+        velocity.x *= -1;
     }
 
     public void bounceFrom(Block block) {

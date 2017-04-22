@@ -16,14 +16,14 @@ import com.badlogic.gdx.physics.box2d.World;
  * Created by Tomaž Ravljen, Drugi Vid d.o.o.
  */
 
-public class HorizontalBorder extends AbstractGameObject {
+public class VerticalBorder extends AbstractGameObject {
 
     private TextureRegion borderLeft;
     private TextureRegion borderRight;
     private Vector2 rightDimension;
     private Body body;
 
-    public HorizontalBorder() {
+    public VerticalBorder() {
         float ratio = Gdx.graphics.getHeight() / (float)Gdx.graphics.getWidth();
         float gameHeight = Constants.GAME_WIDTH * ratio;
 

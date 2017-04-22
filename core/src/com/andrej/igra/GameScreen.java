@@ -17,14 +17,16 @@ public class GameScreen extends ScreenAdapter {
     private WorldController worldController;
     private WorldRenderer worldRenderer;
     private GameInput gameInput;
+    private WorldListener worldListener;
 
     @Override
     public void show() {
         worldController = new WorldController();
         worldRenderer = new WorldRenderer(worldController);
-        gameInput = new GameInput(worldController);
-        worldController.box2dWorld.setContactListener(new WorldListener(worldController));
+        worldListener = new WorldListener(worldController);
+        worldController.box2dWorld.setContactListener(worldListener);
 
+        gameInput = new GameInput(worldController);
         Gdx.input.setInputProcessor(gameInput);
     }
 
@@ -36,6 +38,7 @@ public class GameScreen extends ScreenAdapter {
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
             worldController.update(delta);
+            worldListener.checkBorderContact();
             worldRenderer.render();
         }
     }
