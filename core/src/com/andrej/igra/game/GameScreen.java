@@ -1,8 +1,8 @@
 package com.andrej.igra.game;
 
-import com.andrej.igra.game.control.WorldListener;
 import com.andrej.igra.game.control.GameInput;
 import com.andrej.igra.game.control.WorldController;
+import com.andrej.igra.game.control.WorldListener;
 import com.andrej.igra.game.control.WorldRenderer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
@@ -34,7 +34,7 @@ public class GameScreen extends ScreenAdapter {
     public void render(float delta) {
 
         if (worldController != null && worldRenderer != null) {
-            Gdx.gl.glClearColor(0, 16 / 255f, 31 / 255f, 1);
+            Gdx.gl.glClearColor(0, 0, 0, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
             worldController.update(delta);

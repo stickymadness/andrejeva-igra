@@ -2,6 +2,7 @@ package com.andrej.igra.game.control;
 
 import com.andrej.igra.Constants;
 import com.andrej.igra.Utils;
+import com.andrej.igra.game.gameobjects.Background;
 import com.andrej.igra.game.gameobjects.Ball;
 import com.andrej.igra.game.gameobjects.Block;
 import com.andrej.igra.game.gameobjects.PlayerPad;
@@ -50,6 +51,7 @@ public class Level {
     public ArrayList<Block> blocks;
     public ArrayList<Block> levelBlocks;
 
+    public Background background;
     public TopBorder topBorder;
     public VerticalBorder leftBorder;
     public VerticalBorder rightBorder;
@@ -57,6 +59,7 @@ public class Level {
     private World world;
 
     public Level(World world) {
+        this.background = new Background();
         this.blocks = new ArrayList<Block>();
         this.levelBlocks = new ArrayList<Block>();
         this.destroyBlocks = new ArrayList<Block>();
@@ -104,6 +107,7 @@ public class Level {
 
     public void render(SpriteBatch batch) {
 
+        background.render(batch);
         topBorder.render(batch);
         leftBorder.render(batch);
         rightBorder.render(batch);

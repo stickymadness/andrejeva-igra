@@ -4,7 +4,6 @@ import com.andrej.igra.game.gameobjects.Ball;
 import com.andrej.igra.game.gameobjects.Block;
 import com.andrej.igra.game.gameobjects.PlayerPad;
 import com.andrej.igra.game.gameobjects.TopBorder;
-import com.andrej.igra.game.gameobjects.VerticalBorder;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
