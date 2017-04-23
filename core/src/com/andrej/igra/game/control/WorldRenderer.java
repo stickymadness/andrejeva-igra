@@ -1,4 +1,4 @@
-package com.andrej.igra.control;
+package com.andrej.igra.game.control;
 
 import com.andrej.igra.Constants;
 import com.badlogic.gdx.Gdx;
@@ -28,7 +28,7 @@ public class WorldRenderer {
 
     private void setupCamera() {
         float width = Constants.GAME_WIDTH;
-        float height = width * (Gdx.graphics.getHeight() / (float)Gdx.graphics.getWidth());
+        float height = width * (Gdx.graphics.getHeight() / (float)Gdx.graphics.getWidth()) * 1.1f;
 
         camera = new OrthographicCamera(width, height);
         camera.translate(width / 2, height / 2);

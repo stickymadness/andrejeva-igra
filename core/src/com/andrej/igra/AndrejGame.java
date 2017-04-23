@@ -1,5 +1,6 @@
 package com.andrej.igra;
 
+import com.andrej.igra.menu.MenuScreen;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
@@ -15,8 +16,7 @@ public class AndrejGame extends ApplicationAdapter {
 	@Override
 	public void create () {
 //		assets = Assets.shared;
-//		currentScreen = new SplashScreen(this);
-		currentScreen = new GameScreen();
+		currentScreen = new MenuScreen(this);
 		currentScreen.show();
 	}
 

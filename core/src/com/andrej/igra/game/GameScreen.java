@@ -1,9 +1,9 @@
-package com.andrej.igra;
+package com.andrej.igra.game;
 
-import com.andrej.igra.control.GameInput;
-import com.andrej.igra.control.WorldController;
-import com.andrej.igra.control.WorldListener;
-import com.andrej.igra.control.WorldRenderer;
+import com.andrej.igra.game.control.WorldListener;
+import com.andrej.igra.game.control.GameInput;
+import com.andrej.igra.game.control.WorldController;
+import com.andrej.igra.game.control.WorldRenderer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;

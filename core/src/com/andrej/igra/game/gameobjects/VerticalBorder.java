@@ -1,6 +1,7 @@
-package com.andrej.igra.gameobjects;
+package com.andrej.igra.game.gameobjects;
 
 import com.andrej.igra.Constants;
+import com.andrej.igra.game.gameobjects.AbstractGameObject;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

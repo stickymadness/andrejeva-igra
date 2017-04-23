@@ -1,12 +1,12 @@
-package com.andrej.igra.control;
+package com.andrej.igra.game.control;
 
 import com.andrej.igra.Constants;
 import com.andrej.igra.Utils;
-import com.andrej.igra.gameobjects.Ball;
-import com.andrej.igra.gameobjects.Block;
-import com.andrej.igra.gameobjects.VerticalBorder;
-import com.andrej.igra.gameobjects.PlayerPad;
-import com.andrej.igra.gameobjects.TopBorder;
+import com.andrej.igra.game.gameobjects.Ball;
+import com.andrej.igra.game.gameobjects.Block;
+import com.andrej.igra.game.gameobjects.PlayerPad;
+import com.andrej.igra.game.gameobjects.TopBorder;
+import com.andrej.igra.game.gameobjects.VerticalBorder;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
