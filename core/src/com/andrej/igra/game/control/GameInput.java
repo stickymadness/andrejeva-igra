@@ -1,6 +1,7 @@
 package com.andrej.igra.game.control;
 
 import com.andrej.igra.Constants;
+import com.andrej.igra.Utils;
 import com.andrej.igra.game.gameobjects.PlayerPad;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -14,9 +15,11 @@ public class GameInput implements InputProcessor {
 
     private WorldController worldController;
     private int lastPressedKey = -1;
+    private float gameRatio;
 
     public GameInput(WorldController worldController) {
         this.worldController = worldController;
+        gameRatio = Constants.GAME_WIDTH / Gdx.graphics.getWidth();
     }
 
     @Override
@@ -84,12 +87,15 @@ public class GameInput implements InputProcessor {
         if (!worldController.hasGameStarted()) {
             return;
         }
+
         PlayerPad pad = worldController.level.playerPad;
         float padCenter = pad.position.x + pad.dimension.x / 2;
         if (padCenter < screenX / (Gdx.graphics.getWidth() / Constants.GAME_WIDTH)) {
             pad.setDirectionRight();
+            pad.setTargetPosition((int)(screenX * gameRatio));
         } else if (padCenter > screenX / (Gdx.graphics.getWidth() / Constants.GAME_WIDTH)) {
             pad.setDirectionLeft();
+            pad.setTargetPosition((int)(screenX * gameRatio));
         } else {
             pad.stop();
         }

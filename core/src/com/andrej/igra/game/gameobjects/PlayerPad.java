@@ -1,5 +1,6 @@
 package com.andrej.igra.game.gameobjects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -18,11 +19,13 @@ public class PlayerPad extends AbstractGameObject {
     private Vector2 terminalVelocity;
     private Texture sprite;
     private Body body;
+    private float targetPosition;
 
     public PlayerPad() {
         sprite = new Texture("platform.png");
         dimension.set(10f, 3f);
         terminalVelocity = new Vector2(14, 0);
+        targetPosition = -1;
     }
 
     public void initBody(World world) {
@@ -64,6 +67,7 @@ public class PlayerPad extends AbstractGameObject {
     }
 
     public void stop() {
+        targetPosition = -1;
         velocity.set(0, 0);
     }
 
@@ -71,9 +75,17 @@ public class PlayerPad extends AbstractGameObject {
     public void update(float delta) {
         super.update(delta);
 
+        if (targetPosition == (int)(getCenter().x)) {
+            stop();
+        }
+
         if (body != null) {
             Vector2 bodyPosition = new Vector2(position.x, position.y + dimension.y / 2);
             body.setTransform(bodyPosition.x, bodyPosition.y, rotation);
         }
+    }
+
+    public void setTargetPosition(int x) {
+        targetPosition = x;
     }
 }

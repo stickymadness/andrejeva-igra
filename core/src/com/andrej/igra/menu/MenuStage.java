@@ -39,8 +39,8 @@ public class MenuStage extends Stage {
 
     private void build() {
         buildBackground();
-        buildTitle();
         buildBalloons();
+        buildTitle();
         buildPlayButton();
     }
 
@@ -69,7 +69,7 @@ public class MenuStage extends Stage {
         balloon.setSize(width, height);
         balloon.setPosition(
                 MathUtils.random(-width / 2, Gdx.graphics.getWidth() - width / 2),
-                MathUtils.random(-height * .75f, Gdx.graphics.getHeight() - height / 2)
+                MathUtils.random(-height * 4, 0)
         );
     }
 
