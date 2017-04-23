@@ -1,9 +1,8 @@
-package com.andrej.igra.gameobjects;
+package com.andrej.igra.game.gameobjects;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -22,7 +21,7 @@ public class PlayerPad extends AbstractGameObject {
 
     public PlayerPad() {
         sprite = new Texture("platform.png");
-        dimension.set(14f, 3.6f);
+        dimension.set(10f, 3f);
         terminalVelocity = new Vector2(14, 0);
     }
 
@@ -32,8 +31,6 @@ public class PlayerPad extends AbstractGameObject {
         }
 
         Vector2 center = new Vector2(dimension.x / 2, dimension.y * .1f);
-//        center.set(position.x + dimension.x / 2, position.y + dimension.y / 2);
-
         PolygonShape polyShape = new PolygonShape();
         polyShape.setAsBox(
                 dimension.x * .42f,
@@ -57,6 +54,7 @@ public class PlayerPad extends AbstractGameObject {
         batch.draw(sprite, position.x, position.y, dimension.x, dimension.y);
     }
 
+    // TODO: Add parameter for endPoint, where pad stops (if touch is not moving this has to stop moving too)
     public void setDirectionLeft() {
         velocity.set(-terminalVelocity.x, 0);
     }

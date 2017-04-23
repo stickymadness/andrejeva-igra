@@ -1,12 +1,13 @@
-package com.andrej.igra.control;
+package com.andrej.igra.game.control;
 
 import com.andrej.igra.Constants;
 import com.andrej.igra.Utils;
-import com.andrej.igra.gameobjects.Ball;
-import com.andrej.igra.gameobjects.Block;
-import com.andrej.igra.gameobjects.PlayerPad;
-import com.andrej.igra.gameobjects.HorizontalBorder;
-import com.andrej.igra.gameobjects.TopBorder;
+import com.andrej.igra.game.gameobjects.Background;
+import com.andrej.igra.game.gameobjects.Ball;
+import com.andrej.igra.game.gameobjects.Block;
+import com.andrej.igra.game.gameobjects.PlayerPad;
+import com.andrej.igra.game.gameobjects.TopBorder;
+import com.andrej.igra.game.gameobjects.VerticalBorder;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -50,19 +51,21 @@ public class Level {
     public ArrayList<Block> blocks;
     public ArrayList<Block> levelBlocks;
 
+    public Background background;
     public TopBorder topBorder;
-    public HorizontalBorder leftBorder;
-    public HorizontalBorder rightBorder;
+    public VerticalBorder leftBorder;
+    public VerticalBorder rightBorder;
 
     private World world;
 
     public Level(World world) {
+        this.background = new Background();
         this.blocks = new ArrayList<Block>();
         this.levelBlocks = new ArrayList<Block>();
         this.destroyBlocks = new ArrayList<Block>();
         this.world = world;
 
-        load("level00.png");
+        load("level01.png");
         createPlayerPad();
         createBall();
         buildWalls();
@@ -86,10 +89,10 @@ public class Level {
                 Utils.getGameHeight() - topBorder.dimension.y);
         topBorder.initBody(world);
 
-        leftBorder = new HorizontalBorder();
+        leftBorder = new VerticalBorder();
         leftBorder.initBody(world);
 
-        rightBorder = new HorizontalBorder();
+        rightBorder = new VerticalBorder();
         rightBorder.scale.x = -1;
         rightBorder.position.set(Constants.GAME_WIDTH - rightBorder.dimension.x, 0);
         rightBorder.initBody(world);
@@ -102,24 +105,9 @@ public class Level {
         sweepTheDead();
     }
 
-    private void sweepTheDead() {
-        if (world.isLocked()) {
-            return;
-        }
-
-        for (Block block: destroyBlocks) {
-            world.destroyBody(block.body);
-            blocks.remove(block);
-
-            block.body.setUserData(null);
-            block.body = null;
-        }
-
-        destroyBlocks.clear();
-    }
-
     public void render(SpriteBatch batch) {
 
+        background.render(batch);
         topBorder.render(batch);
         leftBorder.render(batch);
         rightBorder.render(batch);
@@ -135,6 +123,8 @@ public class Level {
     private void load(String filePath) {
         Pixmap pixmap = new Pixmap(Gdx.files.internal(filePath));
 
+        // TODO: Try generating random positions for half of the screen and project horizontally the other half. And remove loading from level file
+
         float ratioX = (Constants.GAME_WIDTH) / pixmap.getWidth();
         float ratioY = (Utils.getGameHeight()) / pixmap.getHeight();
 
@@ -148,6 +138,7 @@ public class Level {
                 switch (blockType) {
                     case BLOCK:
                         block = new Block();
+                        block.dimension.x = ratioX;
                         block.position.set(x * ratioX, invertedY);
                         block.initBody(world);
 
@@ -190,6 +181,23 @@ public class Level {
         for (Block block: blocks) {
             block.initBody(world);
         }
+    }
+
+    private void sweepTheDead() {
+        if (world.isLocked()) {
+            return;
+        }
+
+        for (Block block: destroyBlocks) {
+            world.destroyBody(block.body);
+            blocks.remove(block);
+
+            block.body.setUserData(null);
+            block.body = null;
+            WorldController.shared.score++;
+        }
+
+        destroyBlocks.clear();
     }
 
     void destroy(Block block) {

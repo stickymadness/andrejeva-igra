@@ -1,8 +1,7 @@
-package com.andrej.igra.control;
+package com.andrej.igra.game.control;
 
 import com.andrej.igra.Constants;
-import com.andrej.igra.Utils;
-import com.andrej.igra.gameobjects.PlayerPad;
+import com.andrej.igra.game.gameobjects.PlayerPad;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
@@ -14,6 +13,7 @@ import com.badlogic.gdx.InputProcessor;
 public class GameInput implements InputProcessor {
 
     private WorldController worldController;
+    private int lastPressedKey = -1;
 
     public GameInput(WorldController worldController) {
         this.worldController = worldController;
@@ -23,8 +23,10 @@ public class GameInput implements InputProcessor {
     public boolean keyDown(int keycode) {
 
         if (Input.Keys.LEFT == keycode) {
+            lastPressedKey = keycode;
             worldController.level.playerPad.setDirectionLeft();
         } else if (Input.Keys.RIGHT == keycode) {
+            lastPressedKey = keycode;
             worldController.level.playerPad.setDirectionRight();
         }
 
@@ -32,7 +34,19 @@ public class GameInput implements InputProcessor {
     }
 
     @Override
-    public boolean keyUp(int keycode) { return false; }
+    public boolean keyUp(int keycode) {
+
+        if (lastPressedKey == keycode) {
+            if (Input.Keys.LEFT == keycode) {
+                worldController.level.playerPad.stop();
+            } else if (Input.Keys.RIGHT == keycode) {
+                worldController.level.playerPad.stop();
+            }
+            lastPressedKey = -1;
+        }
+
+        return false;
+    }
 
     @Override
     public boolean keyTyped(char character) { return false; }

@@ -1,7 +1,6 @@
-package com.andrej.igra.gameobjects;
+package com.andrej.igra.game.gameobjects;
 
 import com.andrej.igra.Constants;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -16,23 +15,21 @@ import com.badlogic.gdx.physics.box2d.World;
  * Created by Tomaž Ravljen, Drugi Vid d.o.o.
  */
 
-public class HorizontalBorder extends AbstractGameObject {
+public class TopBorder extends AbstractGameObject {
 
-    private TextureRegion borderLeft;
-    private TextureRegion borderRight;
-    private Vector2 rightDimension;
+    private TextureRegion darkBorder;
+    private TextureRegion lightBorder;
+    private Vector2 topDimension;
+    private float topOffset;
     private Body body;
 
-    public HorizontalBorder() {
-        float ratio = Gdx.graphics.getHeight() / (float)Gdx.graphics.getWidth();
-        float gameHeight = Constants.GAME_WIDTH * ratio;
+    public TopBorder() {
+        darkBorder = new TextureRegion(new Texture("border.png"));
+        lightBorder = new TextureRegion(new Texture("border_top.png"));
 
-        borderLeft = new TextureRegion(new Texture("border.png"));
-        borderRight = new TextureRegion(new Texture("border_top.png"));
-
-        dimension.set(2.5f, gameHeight);
-        rightDimension = new Vector2(dimension.x * .7f, dimension.y);
-        dimension.y -= 2.5f * .7f;
+        dimension.set(Constants.GAME_WIDTH, 2.5f);
+        topDimension = new Vector2(dimension.x, dimension.y * 0.7f);
+        topOffset = dimension.y * .3f;
 
         origin.set(dimension.x / 2, dimension.y / 2);
     }
@@ -44,8 +41,8 @@ public class HorizontalBorder extends AbstractGameObject {
             body.setTransform(getCenter(), rotation);
         }
 
-        batch.draw(borderLeft, position.x, position.y, origin.x, origin.y, dimension.x, dimension.y, scale.x, scale.y, rotation);
-        batch.draw(borderRight, position.x, position.y, origin.x, origin.y, rightDimension.x, rightDimension.y, scale.x, scale.y, rotation);
+        batch.draw(darkBorder, position.x, position.y, dimension.x, dimension.y);
+        batch.draw(lightBorder, position.x, position.y + topOffset, topDimension.x, topDimension.y);
     }
 
     public void initBody(World world) {
@@ -58,8 +55,8 @@ public class HorizontalBorder extends AbstractGameObject {
 
         PolygonShape polyShape = new PolygonShape();
         polyShape.setAsBox(
-                dimension.x * .5f,
-                dimension.y * .6f,
+                dimension.x * .6f,
+                dimension.y * .45f,
                 center,
                 rotation * MathUtils.degRad
         );

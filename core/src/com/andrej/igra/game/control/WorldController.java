@@ -1,4 +1,4 @@
-package com.andrej.igra.control;
+package com.andrej.igra.game.control;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
@@ -12,6 +12,9 @@ public class WorldController {
 
     public Level level;
     public World box2dWorld;
+
+    public float time;
+    public int score;
 
     private boolean hasStarted;
     private boolean isRunning;
@@ -31,6 +34,9 @@ public class WorldController {
         }
 
         if (isRunning) {
+            if (hasStarted) {
+                time += deltaTime;
+            }
             level.update(deltaTime);
         }
     }
@@ -48,7 +54,9 @@ public class WorldController {
         level.ball.velocity.set(0, level.ball.terminalVelocity.y);
     }
 
-    void restart() {
+    private void restart() {
+        score = 0;
+        time = 0;
         hasStarted = false;
         level.restart();
     }
