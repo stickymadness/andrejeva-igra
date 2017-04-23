@@ -62,7 +62,7 @@ public class Level {
         this.destroyBlocks = new ArrayList<Block>();
         this.world = world;
 
-        load("level00.png");
+        load("level01.png");
         createPlayerPad();
         createBall();
         buildWalls();
@@ -148,6 +148,7 @@ public class Level {
                 switch (blockType) {
                     case BLOCK:
                         block = new Block();
+                        block.dimension.x = ratioX;
                         block.position.set(x * ratioX, invertedY);
                         block.initBody(world);
 

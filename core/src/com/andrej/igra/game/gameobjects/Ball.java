@@ -1,9 +1,9 @@
 package com.andrej.igra.game.gameobjects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -17,6 +17,7 @@ import com.badlogic.gdx.physics.box2d.World;
 public class Ball extends AbstractGameObject {
     private static final String TAG = Ball.class.getSimpleName();
     private static final float MAX_BOUNCE_DELAY = .1f;
+    private static final float ROTATION_SPEED = 180f;
 
     public Vector2 terminalVelocity;
     public Vector2 bodyPosition;
@@ -28,7 +29,8 @@ public class Ball extends AbstractGameObject {
     public Ball() {
         sprite = new TextureRegion(new Texture("ball.png"));
         terminalVelocity = new Vector2(20f, 20f);
-        dimension.set(3f, 3f);
+        dimension.set(2.5f, 2.5f);
+        origin.set(dimension.x / 2, dimension.y / 2);
         bodyPosition = new Vector2();
     }
 
@@ -39,13 +41,12 @@ public class Ball extends AbstractGameObject {
 
         bodyPosition.set(position.x, position.y + dimension.y / 2);
         BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.type = BodyDef.BodyType.StaticBody;
         bodyDef.position.set(bodyPosition);
         bodyDef.active = true;
 
         CircleShape circle = new CircleShape();
         circle.setRadius(dimension.x * .45f);
-
         body = world.createBody(bodyDef);
         body.setUserData(this);
 
@@ -56,13 +57,13 @@ public class Ball extends AbstractGameObject {
 
     @Override
     public void render(SpriteBatch batch) {
-        batch.draw(sprite, position.x, position.y, dimension.x, dimension.y);
+        batch.draw(sprite, position.x, position.y, origin.x, origin.y,
+                dimension.x, dimension.y, scale.x, scale.y, rotation);
     }
 
     @Override
     public void update(float delta) {
-        velocity.x = MathUtils.clamp(velocity.x, -terminalVelocity.x, terminalVelocity.x);
-        velocity.y = MathUtils.clamp(velocity.y, -terminalVelocity.y, terminalVelocity.y);
+        velocity.clamp(-terminalVelocity.x, terminalVelocity.x);
 
         super.update(delta);
 
@@ -70,9 +71,13 @@ public class Ball extends AbstractGameObject {
             bounceDelay -= delta;
         }
 
+        if (velocity.x != 0) {
+            rotation += delta * ROTATION_SPEED * (velocity.x / terminalVelocity.x);
+        }
+
         if (body != null) {
             setBodyPosition();
-            body.setTransform(bodyPosition.x, bodyPosition.y, rotation);
+            body.setTransform(bodyPosition.x, bodyPosition.y, 0);
         }
     }
 
@@ -84,29 +89,76 @@ public class Ball extends AbstractGameObject {
         return position.y + dimension.y < 0;
     }
 
-    private boolean canBounce() {
-        return bounceDelay < 0;
-    }
-
     public void bounceHorizontal() {
-        velocity.x *= -1;
+        invertHorizontalVelocity();
     }
 
     public void bounceFrom(Block block) {
-
-        if (canBounce()) {
-            // TODO: Bounce from block, depending on which side you are you need to send it in according direction
+        if (!canBounce()) {
+            return;
         }
+
+        // TODO: Check if velocity X changes direction, if so, check if ball is colliding on right or left, but not larger than 1f;
+        float intersectionX = 0;
+        float intersectionY = 0;
+        float offset = 0.4f;
+
+        if (block.position.x < position.x && position.x < block.position.x + offset) {
+//            invertHorizontalVelocity();
+            intersectionX = block.position.x + offset - position.x;
+        } else if (block.position.x + dimension.x > position.x && position.x > block.position.x + block.dimension.x - offset) {
+//            invertHorizontalVelocity();
+            intersectionX = position.x - block.position.x + block.dimension.x - offset;
+        }
+
+        Gdx.app.error(TAG, "intersectionX: " + intersectionX);
+        Gdx.app.error(TAG, "intersectionY: " + intersectionY);
+
+        if (block.position.y < position.y) {
+//            invertVerticalVelocity();
+            intersectionY = position.y - block.position.y;
+        } else if (block.position.y > position.y) {
+//            invertVerticalVelocity();
+            intersectionY = block.position.y - position.y;
+        }
+
+        if (intersectionX < intersectionY) {
+            bounceVertical();
+        } else {
+            bounceHorizontal();
+        }
+
+        resetBounce();
     }
 
     public void bounceVertical() {
-        velocity.y *= -1;
+        invertVerticalVelocity();
     }
 
     public void bounceFrom(PlayerPad pad) {
-        velocity.set(
-                pad.velocity.x / 2 + velocity.x / 2,
-                velocity.y * -1
-        );
+
+        if (pad.position.y + pad.dimension.y - position.y < 1f) {
+
+            float relativeIntersectX = (pad.position.x + pad.dimension.x / 2) - body.getWorldCenter().x;
+            float normalizedRelativeIntersectionX = relativeIntersectX / (pad.dimension.x / 2);
+            velocity.x = terminalVelocity.x * normalizedRelativeIntersectionX * -1;
+            velocity.y *= -1;
+        }
+    }
+
+    private void invertVerticalVelocity() {
+        velocity.y *= -1;
+    }
+
+    private void invertHorizontalVelocity() {
+        velocity.x *= -1;
+    }
+
+    private void resetBounce() {
+        bounceDelay = MAX_BOUNCE_DELAY;
+    }
+
+    private boolean canBounce() {
+        return bounceDelay < 0;
     }
 }

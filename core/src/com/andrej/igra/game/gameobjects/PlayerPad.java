@@ -21,7 +21,7 @@ public class PlayerPad extends AbstractGameObject {
 
     public PlayerPad() {
         sprite = new Texture("platform.png");
-        dimension.set(14f, 3.6f);
+        dimension.set(10f, 3f);
         terminalVelocity = new Vector2(14, 0);
     }
 
@@ -54,6 +54,7 @@ public class PlayerPad extends AbstractGameObject {
         batch.draw(sprite, position.x, position.y, dimension.x, dimension.y);
     }
 
+    // TODO: Add parameter for endPoint, where pad stops (if touch is not moving this has to stop moving too)
     public void setDirectionLeft() {
         velocity.set(-terminalVelocity.x, 0);
     }

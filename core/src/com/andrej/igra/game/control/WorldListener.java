@@ -26,6 +26,19 @@ public class WorldListener implements ContactListener {
     }
 
     public void checkBorderContact() {
+
+        // For ball
+        Ball ball = worldController.level.ball;
+
+        if (ball.position.x < worldController.level.leftBorder.dimension.x) {
+            ball.bounceHorizontal();
+        } else if (ball.position.x + ball.dimension.x > worldController.level.rightBorder.position.x) {
+            ball.bounceHorizontal();
+        } else if (ball.body.getPosition().y + ball.dimension.y * 0.5f > worldController.level.topBorder.position.y) {
+            ball.bounceVertical();
+        }
+
+        // For pad
         PlayerPad pad = worldController.level.playerPad;
 
         if (pad.position.x < worldController.level.leftBorder.dimension.x) {
@@ -46,25 +59,17 @@ public class WorldListener implements ContactListener {
             Gdx.app.error(TAG, "Contact objects: " + obj1.getClass().getSimpleName() + " - " + obj2.getClass().getSimpleName());
 
             if (obj2 instanceof Block || obj1 instanceof Block) {
-
-                Ball ball = (Ball)(obj1 instanceof Ball ? obj1 : obj2);
                 Block block = (Block)(obj1 instanceof Block ? obj1 : obj2);
                 worldController.level.destroy(block);
-                ball.bounceFrom(block);
+                worldController.level.ball.bounceFrom(block);
             } else if (obj1 instanceof PlayerPad || obj2 instanceof PlayerPad) {
-
-                Ball ball = (Ball)(obj1 instanceof Ball ? obj1 : obj2);
-                PlayerPad pad = (PlayerPad)(obj1 instanceof PlayerPad ? obj1 : obj2);
-                ball.bounceFrom(pad);
+                worldController.level.ball.bounceFrom(worldController.level.playerPad);
             } else if (obj1 instanceof TopBorder || obj2 instanceof TopBorder) {
-
-                Ball ball = (Ball)(obj1 instanceof Ball ? obj1 : obj2);
-                ball.bounceVertical();
-            } else if (obj1 instanceof VerticalBorder || obj2 instanceof VerticalBorder) {
-
-                Ball ball = (Ball)(obj1 instanceof Ball ? obj1 : obj2);
-                ball.bounceHorizontal();
+                worldController.level.ball.bounceVertical();
             }
+//            else if (obj1 instanceof VerticalBorder || obj2 instanceof VerticalBorder) {
+//                worldController.level.ball.bounceHorizontal();
+//            }
         }
     }
 
