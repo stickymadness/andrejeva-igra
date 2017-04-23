@@ -31,7 +31,7 @@ public class MenuStage extends Stage {
 
     public MenuStage(AndrejGame game) {
         this.game = game;
-        assets = new AssetsMenu();
+        assets = AssetsMenu.shared;
         balloons = new ArrayList<BalloonActor>();
 
         build();

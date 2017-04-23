@@ -13,6 +13,7 @@ import java.util.ArrayList;
  */
 
 public class AssetsMenu {
+    public static final AssetsMenu shared = new AssetsMenu();
 
     public Texture background;
     public Texture title;
@@ -20,8 +21,9 @@ public class AssetsMenu {
     public TextureRegionDrawable btnPlayDown;
     public ArrayList<Texture> balloons;
 
-    public AssetsMenu() {
+    private AssetsMenu() {}
 
+    public void load() {
         background = new Texture("menu/background.png");
         title = new Texture("menu/title.png");
         btnPlayUp = new TextureRegionDrawable(new TextureRegion(new Texture("menu/btnPlay.png")));
@@ -48,6 +50,36 @@ public class AssetsMenu {
 
         for (Texture text: balloons) {
             Utils.setLinearFilter(text);
+        }
+    }
+
+    public void dispose() {
+
+        if (background != null) {
+            background.dispose();
+            background = null;
+        }
+
+        if (title != null) {
+            title.dispose();
+            title = null;
+        }
+
+        if (btnPlayDown != null) {
+            btnPlayDown.getRegion().getTexture().dispose();
+            btnPlayDown = null;
+        }
+
+        if (btnPlayUp != null) {
+            btnPlayUp.getRegion().getTexture().dispose();
+            btnPlayUp = null;
+        }
+
+        if (balloons != null && balloons.size() > 0) {
+            for (Texture balloon : balloons) {
+                balloon.dispose();
+            }
+            balloons = null;
         }
     }
 }

@@ -34,10 +34,24 @@ public class BalloonActor extends Image {
     public void act(float delta) {
         super.act(delta);
 
-        if (getY() > Gdx.graphics.getHeight()) {
-            setPosition(getX(), -getHeight());
+        if (isOffScreen()) {
+            spawnOnBottomOfScreen();
         }
 
+        turnAroundIfGoingOffscreenHorizontally();
+        changeDirection(delta);
+
+        updateMotion(delta);
+    }
+
+    private void updateMotion(float delta) {
+        setPosition(
+                getX() + delta * velocity.x,
+                getY() + delta * velocity.y
+        );
+    }
+
+    private void changeDirection(float delta) {
         changeDirectionTimer -= delta;
         if (changeDirectionTimer < 0) {
 
@@ -46,16 +60,39 @@ public class BalloonActor extends Image {
                 velocity.x *= 0.9f;
             } else {
                 changeDirectionTimer = CHANGE_DIRECTION_TIME;
-                terminalVelocity.x *= -MathUtils.random(0.8f, 1.2f);
+                terminalVelocity.x *= MathUtils.random(0.8f, 1.2f);
             }
         } else {
             velocity.x *= 1.2f;
             velocity.x = MathUtils.clamp(velocity.x, -terminalVelocity.x, terminalVelocity.x);
         }
+    }
 
-        setPosition(
-                getX() + delta * velocity.x,
-                getY() + delta * velocity.y
-        );
+    private float getCenterX() {
+        return getX() + getWidth() / 2;
+    }
+
+    private void invertHorizontalVelocity() {
+        velocity.x *= -1;
+    }
+
+    private void turnAroundIfGoingOffscreenHorizontally() {
+        if (getCenterX() > Gdx.graphics.getWidth()) {
+            if (velocity.x > 0) {
+                invertHorizontalVelocity();
+            }
+        } else if (getCenterX() < 0) {
+            if (velocity.x < 0) {
+                invertHorizontalVelocity();
+            }
+        }
+    }
+
+    private boolean isOffScreen() {
+        return getY() > Gdx.graphics.getHeight();
+    }
+
+    private void spawnOnBottomOfScreen() {
+        setPosition(getX(), -getHeight());
     }
 }

@@ -13,6 +13,7 @@ public class MenuScreen extends ScreenAdapter {
     private MenuStage menuStage;
 
     public MenuScreen(AndrejGame game) {
+        AssetsMenu.shared.load();
         menuStage = new MenuStage(game);
     }
 
@@ -36,5 +37,7 @@ public class MenuScreen extends ScreenAdapter {
             menuStage.dispose();
             menuStage = null;
         }
+
+        AssetsMenu.shared.dispose();
     }
 }
