@@ -1,6 +1,7 @@
 package com.andrej.igra.game.gameobjects;
 
 import com.andrej.igra.Constants;
+import com.andrej.igra.Utils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -33,8 +34,10 @@ public class VerticalBorder extends AbstractGameObject {
         dimension.set(2.5f, gameHeight);
         rightDimension = new Vector2(dimension.x * .7f, dimension.y);
         dimension.y -= 2.5f * .7f;
-
         origin.set(dimension.x / 2, dimension.y / 2);
+
+        Utils.setLinearFilter(borderLeft.getTexture());
+        Utils.setLinearFilter(borderRight.getTexture());
     }
 
     @Override

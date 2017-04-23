@@ -1,5 +1,6 @@
 package com.andrej.igra.game.gameobjects;
 
+import com.andrej.igra.Utils;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -23,8 +24,10 @@ public class Block extends AbstractGameObject {
     public Body body;
 
     public Block() {
-        sprite = new TextureRegion(new Texture("0_0.png"));
+        sprite = new TextureRegion(new Texture("blocks/block0.png"));
         dimension.set(defaultWidth, defaultHeight);
+
+        Utils.setLinearFilter(sprite.getTexture());
     }
 
     public void initBody(World world) {

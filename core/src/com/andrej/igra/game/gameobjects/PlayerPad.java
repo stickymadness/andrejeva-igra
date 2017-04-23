@@ -1,5 +1,6 @@
 package com.andrej.igra.game.gameobjects;
 
+import com.andrej.igra.Utils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -22,10 +23,12 @@ public class PlayerPad extends AbstractGameObject {
     private float targetPosition;
 
     public PlayerPad() {
-        sprite = new Texture("platform.png");
+        sprite = new Texture("platform1.png");
         dimension.set(10f, 3f);
         terminalVelocity = new Vector2(14, 0);
         targetPosition = -1;
+
+        Utils.setLinearFilter(sprite);
     }
 
     public void initBody(World world) {
@@ -36,7 +39,7 @@ public class PlayerPad extends AbstractGameObject {
         Vector2 center = new Vector2(dimension.x / 2, dimension.y * .1f);
         PolygonShape polyShape = new PolygonShape();
         polyShape.setAsBox(
-                dimension.x * .42f,
+                dimension.x * .45f,
                 dimension.y * .28f,
                 center,
                 rotation * MathUtils.degRad

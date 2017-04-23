@@ -11,6 +11,8 @@ import com.andrej.igra.game.gameobjects.VerticalBorder;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
 import java.util.ArrayList;
@@ -65,7 +67,7 @@ public class Level {
         this.destroyBlocks = new ArrayList<Block>();
         this.world = world;
 
-        load("level01.png");
+        load("level00.png");
         createPlayerPad();
         createBall();
         buildWalls();
@@ -126,31 +128,39 @@ public class Level {
         // TODO: Try generating random positions for half of the screen and project horizontally the other half. And remove loading from level file
 
         float ratioX = (Constants.GAME_WIDTH) / pixmap.getWidth();
-        float ratioY = (Utils.getGameHeight()) / pixmap.getHeight();
+//        float ratioY = (Utils.getGameHeight()) / pixmap.getHeight();
+        ArrayList<Vector2> possibleBlockList = new ArrayList<Vector2>();
+        float width = ratioX;
 
-        for (int x = 0; x < pixmap.getWidth(); x++) {
+        for (int x = 0; x < pixmap.getWidth() / 2; x++) {
             for (int y = 0; y < pixmap.getHeight(); y++) {
                 int color = pixmap.getPixel(x, y);
                 BLOCK_TYPE blockType = BLOCK_TYPE.getType(color);
-                Block block;
 
                 float invertedY = Utils.getGameHeight() - (y + 2.4f) * 2f;
-                switch (blockType) {
-                    case BLOCK:
-                        block = new Block();
-                        block.dimension.x = ratioX;
-                        block.position.set(x * ratioX, invertedY);
-                        block.initBody(world);
-
-                        levelBlocks.add(block);
-                        blocks.add(block);
-                        break;
-
-                    case EMPTY:
-                        break;
+                if (BLOCK_TYPE.BLOCK == blockType) {
+                    possibleBlockList.add(new Vector2(x * ratioX, invertedY));
+//                    createBlock(x * ratioX, invertedY, ratioX);
                 }
             }
         }
+
+        for (Vector2 position: possibleBlockList) {
+            if (MathUtils.randomBoolean()) {
+                createBlock(position.x, position.y, width);
+                createBlock(Constants.GAME_WIDTH - position.x - width, position.y, width);
+            }
+        }
+    }
+
+    private void createBlock(float x, float y, float width) {
+        Block block = new Block();
+        block.dimension.x = width;
+        block.position.set(x, y);
+        block.initBody(world);
+
+        levelBlocks.add(block);
+        blocks.add(block);
     }
 
     boolean isGameOver() {

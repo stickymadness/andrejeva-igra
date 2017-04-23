@@ -1,6 +1,7 @@
 package com.andrej.igra.game.gameobjects;
 
 import com.andrej.igra.Constants;
+import com.andrej.igra.Utils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -14,10 +15,13 @@ public class Background extends AbstractGameObject {
     private Texture sprite;
 
     public Background() {
-        sprite = new Texture("menu/background.png");
         float width = Constants.GAME_WIDTH;
         float height = width * (Gdx.graphics.getHeight() / (float)Gdx.graphics.getWidth()) * 1.1f;
+
         dimension.set(width, height);
+        sprite = new Texture("menu/background.png");
+
+        Utils.setLinearFilter(sprite);
     }
 
     @Override

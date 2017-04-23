@@ -1,5 +1,6 @@
 package com.andrej.igra.game.gameobjects;
 
+import com.andrej.igra.Utils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -32,6 +33,8 @@ public class Ball extends AbstractGameObject {
         dimension.set(2.5f, 2.5f);
         origin.set(dimension.x / 2, dimension.y / 2);
         bodyPosition = new Vector2();
+
+        Utils.setLinearFilter(sprite.getTexture());
     }
 
     public void initBody(World world) {

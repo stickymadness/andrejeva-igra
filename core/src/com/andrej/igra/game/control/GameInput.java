@@ -56,17 +56,16 @@ public class GameInput implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-
-        if (!worldController.hasGameStarted()) {
-            worldController.start();
-        }
-
         movePlayerPad(screenX);
         return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        if (!worldController.hasGameStarted()) {
+            worldController.start();
+        }
+
         worldController.level.playerPad.stop();
         return false;
     }
@@ -84,12 +83,9 @@ public class GameInput implements InputProcessor {
     public boolean scrolled(int amount) { return false; }
 
     private void movePlayerPad(int screenX) {
-        if (!worldController.hasGameStarted()) {
-            return;
-        }
-
         PlayerPad pad = worldController.level.playerPad;
         float padCenter = pad.position.x + pad.dimension.x / 2;
+
         if (padCenter < screenX / (Gdx.graphics.getWidth() / Constants.GAME_WIDTH)) {
             pad.setDirectionRight();
             pad.setTargetPosition((int)(screenX * gameRatio));

@@ -1,6 +1,7 @@
 package com.andrej.igra.game.gameobjects;
 
 import com.andrej.igra.Constants;
+import com.andrej.igra.Utils;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -30,8 +31,10 @@ public class TopBorder extends AbstractGameObject {
         dimension.set(Constants.GAME_WIDTH, 2.5f);
         topDimension = new Vector2(dimension.x, dimension.y * 0.7f);
         topOffset = dimension.y * .3f;
-
         origin.set(dimension.x / 2, dimension.y / 2);
+
+        Utils.setLinearFilter(darkBorder);
+        Utils.setLinearFilter(lightBorder);
     }
 
     @Override

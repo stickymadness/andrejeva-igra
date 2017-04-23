@@ -23,8 +23,8 @@ public class BalloonActor extends Image {
 
         changeDirectionTimer = 0;
         terminalVelocity = new Vector2(
-                MathUtils.random(10, 15) * (MathUtils.randomBoolean() ? -1 : 1),
-                MathUtils.random(40, 60)
+                MathUtils.random(Gdx.graphics.getWidth() / 32f, Gdx.graphics.getHeight() / 37f) * (MathUtils.randomBoolean() ? -1 : 1),
+                MathUtils.random(Gdx.graphics.getWidth() / 8f, Gdx.graphics.getHeight() / 9f)
         );
 
         velocity = new Vector2(terminalVelocity.x * .1f, terminalVelocity.y);
