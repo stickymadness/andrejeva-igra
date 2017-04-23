@@ -36,7 +36,7 @@ public class GameStage extends Stage {
     private void buildScoreLabel() {
         Label.LabelStyle style = new Label.LabelStyle();
         style.font = new BitmapFont();
-        scoreLabel = new Label("0", style);
+        scoreLabel = new Label("SCORE: 0", style);
         addActor(scoreLabel);
 
         repositionScoreLabel();
@@ -59,7 +59,7 @@ public class GameStage extends Stage {
     }
 
     public void updateScore(int score) {
-        scoreLabel.setText(String.valueOf(score));
+        scoreLabel.setText("SCORE: " + score);
         repositionScoreLabel();
     }
 

@@ -36,6 +36,8 @@ public class WorldController {
         if (isRunning) {
             if (hasStarted) {
                 time += deltaTime;
+            } else {
+                level.respawnBall();
             }
             level.update(deltaTime);
         }

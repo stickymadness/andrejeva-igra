@@ -168,8 +168,8 @@ public class Level {
         playerPad.velocity.set(0, 0);
     }
 
-    private void respawnBall() {
-        ball.position.set(playerPad.position.x + playerPad.dimension.x / 2,
+    public void respawnBall() {
+        ball.position.set(playerPad.position.x + playerPad.dimension.x / 2 - ball.dimension.x / 2,
                 playerPad.position.y + playerPad.dimension.y);
         ball.velocity.set(0, 0);
     }
