@@ -102,22 +102,6 @@ public class Level {
         sweepTheDead();
     }
 
-    private void sweepTheDead() {
-        if (world.isLocked()) {
-            return;
-        }
-
-        for (Block block: destroyBlocks) {
-            world.destroyBody(block.body);
-            blocks.remove(block);
-
-            block.body.setUserData(null);
-            block.body = null;
-        }
-
-        destroyBlocks.clear();
-    }
-
     public void render(SpriteBatch batch) {
 
         topBorder.render(batch);
@@ -134,6 +118,8 @@ public class Level {
 
     private void load(String filePath) {
         Pixmap pixmap = new Pixmap(Gdx.files.internal(filePath));
+
+        // TODO: Try generating random positions for half of the screen and project horizontally the other half. And remove loading from level file
 
         float ratioX = (Constants.GAME_WIDTH) / pixmap.getWidth();
         float ratioY = (Utils.getGameHeight()) / pixmap.getHeight();
@@ -191,6 +177,23 @@ public class Level {
         for (Block block: blocks) {
             block.initBody(world);
         }
+    }
+
+    private void sweepTheDead() {
+        if (world.isLocked()) {
+            return;
+        }
+
+        for (Block block: destroyBlocks) {
+            world.destroyBody(block.body);
+            blocks.remove(block);
+
+            block.body.setUserData(null);
+            block.body = null;
+            WorldController.shared.score++;
+        }
+
+        destroyBlocks.clear();
     }
 
     void destroy(Block block) {

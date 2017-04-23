@@ -17,7 +17,7 @@ import com.badlogic.gdx.physics.box2d.World;
 public class Ball extends AbstractGameObject {
     private static final String TAG = Ball.class.getSimpleName();
     private static final float MAX_BOUNCE_DELAY = .1f;
-    private static final float ROTATION_SPEED = 180f;
+    private static final float ROTATION_SPEED = 720f;
 
     public Vector2 terminalVelocity;
     public Vector2 bodyPosition;
@@ -98,29 +98,19 @@ public class Ball extends AbstractGameObject {
             return;
         }
 
-        // TODO: Check if velocity X changes direction, if so, check if ball is colliding on right or left, but not larger than 1f;
         float intersectionX = 0;
         float intersectionY = 0;
-        float offset = 0.4f;
 
-        if (block.position.x < position.x && position.x < block.position.x + offset) {
-//            invertHorizontalVelocity();
-            intersectionX = block.position.x + offset - position.x;
-        } else if (block.position.x + dimension.x > position.x && position.x > block.position.x + block.dimension.x - offset) {
-//            invertHorizontalVelocity();
-            intersectionX = position.x - block.position.x + block.dimension.x - offset;
+        if (block.position.x > position.x && block.position.x < position.x + dimension.x) {
+            intersectionX = Math.abs(block.position.x - position.x);
+        }
+
+        if (block.position.y > position.y && block.position.y < position.y + dimension.y) {
+            intersectionY = Math.abs(block.position.y - position.y);
         }
 
         Gdx.app.error(TAG, "intersectionX: " + intersectionX);
         Gdx.app.error(TAG, "intersectionY: " + intersectionY);
-
-        if (block.position.y < position.y) {
-//            invertVerticalVelocity();
-            intersectionY = position.y - block.position.y;
-        } else if (block.position.y > position.y) {
-//            invertVerticalVelocity();
-            intersectionY = block.position.y - position.y;
-        }
 
         if (intersectionX < intersectionY) {
             bounceVertical();
