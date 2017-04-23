@@ -1,4 +1,4 @@
-package com.andrej.igra.gameobjects;
+package com.andrej.igra.game.gameobjects;
 
 import com.andrej.igra.Constants;
 import com.badlogic.gdx.Gdx;

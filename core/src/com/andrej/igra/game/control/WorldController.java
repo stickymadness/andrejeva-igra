@@ -1,4 +1,4 @@
-package com.andrej.igra.control;
+package com.andrej.igra.game.control;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;

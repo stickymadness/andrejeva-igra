@@ -1,11 +1,9 @@
 package com.andrej.igra;
 
+import com.andrej.igra.menu.MenuScreen;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class AndrejGame extends ApplicationAdapter {
 
@@ -18,8 +16,7 @@ public class AndrejGame extends ApplicationAdapter {
 	@Override
 	public void create () {
 //		assets = Assets.shared;
-//		currentScreen = new SplashScreen(this);
-		currentScreen = new GameScreen();
+		currentScreen = new MenuScreen(this);
 		currentScreen.show();
 	}
 
