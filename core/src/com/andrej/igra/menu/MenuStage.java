@@ -5,16 +5,12 @@ import com.andrej.igra.Constants;
 import com.andrej.igra.game.GameScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.sun.org.apache.bcel.internal.generic.BALOAD;
-
-import java.util.ArrayList;
 
 /**
  * Created by Tomaž Ravljen, Drugi Vid d.o.o.

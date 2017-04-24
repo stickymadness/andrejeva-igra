@@ -1,18 +1,14 @@
 package com.andrej.igra.game.gameobjects;
 
 import com.andrej.igra.Utils;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.World;
-
-import javax.xml.bind.ValidationEventLocator;
 
 /**
  * Created by Tomaž Ravljen, Drugi Vid d.o.o.
@@ -118,30 +114,6 @@ public class Ball extends AbstractGameObject {
         velocity.y = terminalVelocity.y * normalizedRelativeIntersectionY * -1;
 
         bounceDelay = MAX_BOUNCE_DELAY;
-    }
-
-    private float oppositeOfClamp(float normalizedRelativeIntersection) {
-        float minimalVelocityPercentage = 0.2f;
-
-//        return Math.abs(normalizedRelativeIntersection) < 0.2f :
-
-        if (normalizedRelativeIntersection <= 0) {
-            if (normalizedRelativeIntersection > -minimalVelocityPercentage) {
-                return minimalVelocityPercentage;
-            } else {
-                return normalizedRelativeIntersection;
-            }
-        } else {
-            if (normalizedRelativeIntersection < minimalVelocityPercentage) {
-                return minimalVelocityPercentage;
-            } else {
-                return normalizedRelativeIntersection;
-            }
-        }
-
-//        if (minimalVelocityPercentage > normalizedRelativeIntersection || normalizedRelativeIntersection >)
-//            normalizedRelativeIntersectionX =
-
     }
 
     public void bounceVertical() {
