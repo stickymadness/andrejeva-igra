@@ -48,6 +48,11 @@ public class WorldController {
 
     public void dispose() {
         shared = null;
+
+        if (level != null) {
+            level.dispose();
+            level = null;
+        }
     }
 
     boolean hasGameStarted() {

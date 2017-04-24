@@ -1,6 +1,7 @@
 package com.andrej.igra.game.gameobjects;
 
 import com.andrej.igra.Utils;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -66,10 +67,19 @@ public class Block extends AbstractGameObject {
     }
 
     @Override
+    public void update(float delta) {
+        super.update(delta);
+
+        if (body != null) {
+            body.setTransform(position.x, position.y, body.getAngle());
+        }
+    }
+
+    @Override
     public void render(SpriteBatch batch) {
         if (durability - 1 >= 0) {
             batch.draw(sprites.get(durability - 1), position.x, position.y, origin.x, origin.y,
-                    dimension.x, dimension.y, scale.x, scale.y, rotation);
+                    dimension.x, dimension.y, scale.x, scale.y, body.getAngle() * MathUtils.radiansToDegrees);
         }
     }
 
@@ -108,5 +118,15 @@ public class Block extends AbstractGameObject {
 
     public void reset() {
         durability = value;
+    }
+
+    @Override
+    public void dispose() {
+        if (sprites != null) {
+            for (TextureRegion region: sprites) {
+                region.getTexture().dispose();
+            }
+            sprites = null;
+        }
     }
 }

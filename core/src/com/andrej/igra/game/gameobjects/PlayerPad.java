@@ -25,7 +25,7 @@ public class PlayerPad extends AbstractGameObject {
     public PlayerPad() {
         sprite = new Texture("platform1.png");
         dimension.set(10f, 3f);
-        terminalVelocity = new Vector2(14, 0);
+        terminalVelocity = new Vector2(17, 0);
         targetPosition = -1;
 
         Utils.setLinearFilter(sprite);
@@ -90,5 +90,14 @@ public class PlayerPad extends AbstractGameObject {
 
     public void setTargetPosition(int x) {
         targetPosition = x;
+    }
+
+    @Override
+    public void dispose() {
+
+        if (sprite != null) {
+            sprite.dispose();
+            sprite = null;
+        }
     }
 }

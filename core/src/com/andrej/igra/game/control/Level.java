@@ -182,7 +182,7 @@ public class Level {
     }
 
     private void centerPlayerPad() {
-        playerPad.position.set(Constants.GAME_WIDTH / 2 - playerPad.dimension.x / 2, 2);
+        playerPad.position.set(Constants.GAME_WIDTH / 2 - playerPad.dimension.x / 2, 7);
         playerPad.velocity.set(0, 0);
     }
 
@@ -230,5 +230,42 @@ public class Level {
 
     public boolean isGameComplete() {
         return blocks.size() == 0;
+    }
+
+    public void dispose() {
+        if (world != null) {
+            world.dispose();
+            world = null;
+        }
+
+        if (ball != null) {
+            ball.dispose();
+        }
+
+        if (playerPad != null) {
+            playerPad.dispose();
+        }
+
+        if (levelBlocks != null) {
+            for (Block block: levelBlocks) {
+                block.dispose();
+            }
+        }
+
+        if (background != null) {
+            background.dispose();
+        }
+
+        if (topBorder != null) {
+            topBorder.dispose();
+        }
+
+        if (leftBorder != null) {
+            leftBorder.dispose();
+        }
+
+        if (rightBorder != null) {
+            rightBorder.dispose();
+        }
     }
 }

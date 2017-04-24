@@ -20,8 +20,8 @@ import javax.xml.bind.ValidationEventLocator;
 
 public class Ball extends AbstractGameObject {
     private static final String TAG = Ball.class.getSimpleName();
-    private static final float MAX_BOUNCE_DELAY = .1f;
-    private static final float MIN_BOUNCE_DELAY = .05f;
+    private static final float MAX_BOUNCE_DELAY = .05f;
+    private static final float MIN_BOUNCE_DELAY = .02f;
     private static final float ROTATION_SPEED = 720f;
 
     public Vector2 terminalVelocity;
@@ -97,8 +97,10 @@ public class Ball extends AbstractGameObject {
     }
 
     public void bounceHorizontal() {
-        invertHorizontalVelocity();
-        bounceDelay = MIN_BOUNCE_DELAY;
+        if (canBounce()) {
+            invertHorizontalVelocity();
+            bounceDelay = MIN_BOUNCE_DELAY;
+        }
     }
 
     public void bounceFrom(Block block) {
@@ -106,52 +108,40 @@ public class Ball extends AbstractGameObject {
             return;
         }
 
-//        float relativeIntersectX = (block.position.x + block.dimension.x / 2) - getCenter().x;
-//        float normalizedRelativeIntersectionX = relativeIntersectX / (block.dimension.x / 2);
-//
-//        float relativeIntersectY = block.getCenter().y - body.getWorldCenter().y;
-//        float normalizedRelativeIntersectionY = relativeIntersectY / (block.dimension.y / 2);
+        float relativeIntersectX = (block.position.x + block.dimension.x / 2) - getCenter().x;
+        float normalizedRelativeIntersectionX = relativeIntersectX / (block.dimension.x / 2);
 
-//        velocity.x = terminalVelocity.x * normalizedRelativeIntersectionX * -1;
-//        velocity.y = terminalVelocity.y * normalizedRelativeIntersectionY * -1;
+        float relativeIntersectY = block.getCenter().y - body.getWorldCenter().y;
+        float normalizedRelativeIntersectionY = relativeIntersectY / (block.dimension.y / 2);
 
-//        boolean bounceX = Math.abs(relativeIntersectX) > .9f;
-//        boolean bounceY = Math.abs(relativeIntersectY) > .9f;
-//
-//        Gdx.app.error(TAG, "bounceX: " + bounceX + ", bounceY: " + bounceY);
-//        if (getCenter().y > block.position.y && getCenter().y < block.position.y + block.dimension.y) {
-//            if (bounceX) {
-//                velocity.x *= -1;
-//            }
-//        }
-//
-//        if (getCenter().x > block.position.x && getCenter().x < block.position.x + block.dimension.x) {
-//            if (bounceY) {
-//                velocity.y *= -1;
-//            }
-//        }
-
-        float intersectionX = 0;
-        float intersectionY = 0;
-
-        if (block.position.x > position.x && block.position.x < position.x + dimension.x) {
-            intersectionX = Math.abs(block.position.x - position.x);
-        }
-
-        if (block.position.y > position.y && block.position.y < position.y + dimension.y) {
-            intersectionY = Math.abs(block.position.y - position.y);
-        }
-
-//        Gdx.app.error(TAG, "intersectionX: " + intersectionX);
-//        Gdx.app.error(TAG, "intersectionY: " + intersectionY);
-
-        if (intersectionX < intersectionY) {
-            bounceVertical();
-        } else {
-            bounceHorizontal();
-        }
+        velocity.x = terminalVelocity.x * normalizedRelativeIntersectionX * -1;
+        velocity.y = terminalVelocity.y * normalizedRelativeIntersectionY * -1;
 
         bounceDelay = MAX_BOUNCE_DELAY;
+    }
+
+    private float oppositeOfClamp(float normalizedRelativeIntersection) {
+        float minimalVelocityPercentage = 0.2f;
+
+//        return Math.abs(normalizedRelativeIntersection) < 0.2f :
+
+        if (normalizedRelativeIntersection <= 0) {
+            if (normalizedRelativeIntersection > -minimalVelocityPercentage) {
+                return minimalVelocityPercentage;
+            } else {
+                return normalizedRelativeIntersection;
+            }
+        } else {
+            if (normalizedRelativeIntersection < minimalVelocityPercentage) {
+                return minimalVelocityPercentage;
+            } else {
+                return normalizedRelativeIntersection;
+            }
+        }
+
+//        if (minimalVelocityPercentage > normalizedRelativeIntersection || normalizedRelativeIntersection >)
+//            normalizedRelativeIntersectionX =
+
     }
 
     public void bounceVertical() {
@@ -179,5 +169,13 @@ public class Ball extends AbstractGameObject {
 
     private boolean canBounce() {
         return bounceDelay < 0;
+    }
+
+    @Override
+    public void dispose() {
+        if (sprite != null) {
+            sprite.getTexture().dispose();
+            sprite = null;
+        }
     }
 }

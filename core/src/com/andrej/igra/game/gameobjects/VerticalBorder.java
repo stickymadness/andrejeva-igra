@@ -31,9 +31,9 @@ public class VerticalBorder extends AbstractGameObject {
         borderLeft = new TextureRegion(new Texture("border.png"));
         borderRight = new TextureRegion(new Texture("border_top.png"));
 
-        dimension.set(2.5f, gameHeight);
+        dimension.set(3.5f, gameHeight);
         rightDimension = new Vector2(dimension.x * .7f, dimension.y);
-        dimension.y -= 2.5f * .7f;
+        dimension.y -= dimension.x * .7f;
         origin.set(dimension.x / 2, dimension.y / 2);
 
         Utils.setLinearFilter(borderLeft.getTexture());
@@ -68,7 +68,7 @@ public class VerticalBorder extends AbstractGameObject {
         );
 
         BodyDef boxBodyDef = new BodyDef();
-        boxBodyDef.type = BodyDef.BodyType.StaticBody;
+        boxBodyDef.type = BodyDef.BodyType.DynamicBody;
 
         body = world.createBody(boxBodyDef);
         body.createFixture(polyShape, 1);
@@ -76,5 +76,19 @@ public class VerticalBorder extends AbstractGameObject {
         body.getPosition().set(position);
 
         polyShape.dispose();
+    }
+
+    @Override
+    public void dispose() {
+
+        if (borderLeft != null) {
+            borderLeft.getTexture().dispose();
+            borderLeft = null;
+        }
+
+        if (borderRight != null) {
+            borderRight.getTexture().dispose();
+            borderRight = null;
+        }
     }
 }

@@ -28,7 +28,7 @@ public class TopBorder extends AbstractGameObject {
         darkBorder = new TextureRegion(new Texture("border.png"));
         lightBorder = new TextureRegion(new Texture("border_top.png"));
 
-        dimension.set(Constants.GAME_WIDTH, 2.5f);
+        dimension.set(Constants.GAME_WIDTH, 3.5f);
         topDimension = new Vector2(dimension.x, dimension.y * 0.7f);
         topOffset = dimension.y * .3f;
         origin.set(dimension.x / 2, dimension.y / 2);
@@ -73,5 +73,14 @@ public class TopBorder extends AbstractGameObject {
         body.getPosition().set(position);
 
         polyShape.dispose();
+    }
+
+    @Override
+    public void dispose() {
+
+        if (darkBorder != null) {
+            darkBorder.getTexture().dispose();
+            darkBorder = null;
+        }
     }
 }
