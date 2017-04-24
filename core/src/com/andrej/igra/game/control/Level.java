@@ -156,8 +156,7 @@ public class Level {
                 }
 
                 createBlock(position.x, position.y, width, blockDurability);
-                return;
-//                createBlock(Constants.GAME_WIDTH - position.x - width, position.y, width, blockDurability);
+                createBlock(Constants.GAME_WIDTH - position.x - width, position.y, width, blockDurability);
             }
         }
     }
