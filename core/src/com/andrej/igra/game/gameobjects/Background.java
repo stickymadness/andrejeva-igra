@@ -28,4 +28,13 @@ public class Background extends AbstractGameObject {
     public void render(SpriteBatch batch) {
         batch.draw(sprite, 0, 0, dimension.x, dimension.y);
     }
+
+    @Override
+    public void dispose() {
+
+        if (sprite != null) {
+            sprite.dispose();
+            sprite = null;
+        }
+    }
 }

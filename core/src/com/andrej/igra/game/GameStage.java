@@ -35,21 +35,20 @@ public class GameStage extends Stage {
 
     private void buildScoreLabel() {
         Label.LabelStyle style = new Label.LabelStyle();
-        style.font = new BitmapFont();
+        style.font = getFont();
         scoreLabel = new Label("SCORE: 0", style);
         addActor(scoreLabel);
 
         repositionScoreLabel();
-//        scoreLabel.setPosition(padding, y + height / 2 - scoreLabel.getHeight());
     }
 
     private void buildTimeLabel() {
         Label.LabelStyle style = new Label.LabelStyle();
-        style.font = new BitmapFont();
+        style.font = getFont();
         timeLabel = new Label("0:00", style);
         addActor(timeLabel);
 
-        timeLabel.setPosition(getWidth() / 2 - timeLabel.getWidth() / 2, y + height / 2 - timeLabel .getHeight());
+        timeLabel.setPosition(padding, y + height / 2 - timeLabel .getHeight());
     }
 
     public void updateTime(int time) {
@@ -72,5 +71,13 @@ public class GameStage extends Stage {
 
     private String secondsString(int seconds) {
         return seconds < 10 ? "0" + seconds : String.valueOf(seconds);
+    }
+
+    private BitmapFont getFont() {
+        // TODO: Get custom font with calculated height
+        BitmapFont font = new BitmapFont();
+        float size = 2.5f;
+        font.getData().setScale(size, size);
+        return font;
     }
 }

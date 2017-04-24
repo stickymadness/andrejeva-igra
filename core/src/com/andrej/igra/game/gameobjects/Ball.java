@@ -1,7 +1,6 @@
 package com.andrej.igra.game.gameobjects;
 
 import com.andrej.igra.Utils;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -17,7 +16,8 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class Ball extends AbstractGameObject {
     private static final String TAG = Ball.class.getSimpleName();
-    private static final float MAX_BOUNCE_DELAY = .1f;
+    private static final float MAX_BOUNCE_DELAY = .05f;
+    private static final float MIN_BOUNCE_DELAY = .02f;
     private static final float ROTATION_SPEED = 720f;
 
     public Vector2 terminalVelocity;
@@ -29,7 +29,7 @@ public class Ball extends AbstractGameObject {
 
     public Ball() {
         sprite = new TextureRegion(new Texture("ball.png"));
-        terminalVelocity = new Vector2(20f, 20f);
+        terminalVelocity = new Vector2(25f, 25f);
         dimension.set(2.5f, 2.5f);
         origin.set(dimension.x / 2, dimension.y / 2);
         bodyPosition = new Vector2();
@@ -93,7 +93,10 @@ public class Ball extends AbstractGameObject {
     }
 
     public void bounceHorizontal() {
-        invertHorizontalVelocity();
+        if (canBounce()) {
+            invertHorizontalVelocity();
+            bounceDelay = MIN_BOUNCE_DELAY;
+        }
     }
 
     public void bounceFrom(Block block) {
@@ -101,27 +104,16 @@ public class Ball extends AbstractGameObject {
             return;
         }
 
-        float intersectionX = 0;
-        float intersectionY = 0;
+        float relativeIntersectX = (block.position.x + block.dimension.x / 2) - getCenter().x;
+        float normalizedRelativeIntersectionX = relativeIntersectX / (block.dimension.x / 2);
 
-        if (block.position.x > position.x && block.position.x < position.x + dimension.x) {
-            intersectionX = Math.abs(block.position.x - position.x);
-        }
+        float relativeIntersectY = block.getCenter().y - body.getWorldCenter().y;
+        float normalizedRelativeIntersectionY = relativeIntersectY / (block.dimension.y / 2);
 
-        if (block.position.y > position.y && block.position.y < position.y + dimension.y) {
-            intersectionY = Math.abs(block.position.y - position.y);
-        }
+        velocity.x = terminalVelocity.x * normalizedRelativeIntersectionX * -1;
+        velocity.y = terminalVelocity.y * normalizedRelativeIntersectionY * -1;
 
-        Gdx.app.error(TAG, "intersectionX: " + intersectionX);
-        Gdx.app.error(TAG, "intersectionY: " + intersectionY);
-
-        if (intersectionX < intersectionY) {
-            bounceVertical();
-        } else {
-            bounceHorizontal();
-        }
-
-        resetBounce();
+        bounceDelay = MAX_BOUNCE_DELAY;
     }
 
     public void bounceVertical() {
@@ -147,11 +139,15 @@ public class Ball extends AbstractGameObject {
         velocity.x *= -1;
     }
 
-    private void resetBounce() {
-        bounceDelay = MAX_BOUNCE_DELAY;
-    }
-
     private boolean canBounce() {
         return bounceDelay < 0;
+    }
+
+    @Override
+    public void dispose() {
+        if (sprite != null) {
+            sprite.getTexture().dispose();
+            sprite = null;
+        }
     }
 }

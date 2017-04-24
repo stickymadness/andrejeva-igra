@@ -52,4 +52,6 @@ public abstract class AbstractGameObject {
         center.set(position.x + dimension.x / 2, position.y + dimension.y / 2);
         return center;
     }
+
+    abstract public void dispose();
 }

@@ -53,4 +53,12 @@ public class WorldRenderer {
         stage.act();
         stage.draw();
     }
+
+    public void dispose() {
+
+        if (batch != null) {
+            batch.dispose();
+            batch = null;
+        }
+    }
 }

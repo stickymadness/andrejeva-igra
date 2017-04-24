@@ -1,19 +1,16 @@
 package com.andrej.igra.menu;
 
 import com.andrej.igra.AndrejGame;
+import com.andrej.igra.Constants;
 import com.andrej.igra.game.GameScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.sun.org.apache.bcel.internal.generic.BALOAD;
-
-import java.util.ArrayList;
 
 /**
  * Created by Tomaž Ravljen, Drugi Vid d.o.o.
@@ -24,7 +21,6 @@ public class MenuStage extends Stage {
     private Image background;
     private Image title;
     private Button playButton;
-    private ArrayList<BalloonActor> balloons;
 
     private AssetsMenu assets;
     private AndrejGame game;
@@ -32,7 +28,6 @@ public class MenuStage extends Stage {
     public MenuStage(AndrejGame game) {
         this.game = game;
         assets = AssetsMenu.shared;
-        balloons = new ArrayList<BalloonActor>();
 
         build();
     }
@@ -52,8 +47,8 @@ public class MenuStage extends Stage {
     }
 
     private void buildBalloons() {
-        for (Texture texture: assets.balloons) {
-            buildBalloon(texture);
+        for (int i = 0; i < Constants.MAX_BALLOONS; i++) {
+            buildBalloon(assets.getRandomBalloon());
         }
     }
 
@@ -69,7 +64,7 @@ public class MenuStage extends Stage {
         balloon.setSize(width, height);
         balloon.setPosition(
                 MathUtils.random(-width / 2, Gdx.graphics.getWidth() - width / 2),
-                MathUtils.random(-height * 4, 0)
+                MathUtils.random(-Gdx.graphics.getHeight(), 0)
         );
     }
 

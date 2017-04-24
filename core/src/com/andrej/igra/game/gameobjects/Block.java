@@ -11,6 +11,8 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
+import java.util.ArrayList;
+
 /**
  * Created by Tomaž Ravljen, Drugi Vid d.o.o.
  */
@@ -20,14 +22,20 @@ public class Block extends AbstractGameObject {
     public static final float defaultHeight = 2f;
     public static final float defaultWidth = 5f;
 
-    private TextureRegion sprite;
+    private ArrayList<TextureRegion> sprites;
+    private int value;
+    private int durability;
     public Body body;
 
-    public Block() {
-        sprite = new TextureRegion(new Texture("blocks/block0.png"));
+    public Block(int durability) {
+        this.durability = durability;
+        this.value = durability;
+        this.sprites = new ArrayList<TextureRegion>();
+
+        sprites = getSpritesBasedOnDurability();
         dimension.set(defaultWidth, defaultHeight);
 
-        Utils.setLinearFilter(sprite.getTexture());
+        Utils.setLinearFilter(sprites);
     }
 
     public void initBody(World world) {
@@ -58,8 +66,66 @@ public class Block extends AbstractGameObject {
     }
 
     @Override
+    public void update(float delta) {
+        super.update(delta);
+
+        if (body != null) {
+            body.setTransform(position.x, position.y, body.getAngle());
+        }
+    }
+
+    @Override
     public void render(SpriteBatch batch) {
-        batch.draw(sprite, position.x, position.y, origin.x, origin.y,
-                dimension.x, dimension.y, scale.x, scale.y, rotation);
+        if (durability - 1 >= 0) {
+            batch.draw(sprites.get(durability - 1), position.x, position.y, origin.x, origin.y,
+                    dimension.x, dimension.y, scale.x, scale.y, body.getAngle() * MathUtils.radiansToDegrees);
+        }
+    }
+
+    private ArrayList<TextureRegion> getSpritesBasedOnDurability() {
+        ArrayList<TextureRegion> list = new ArrayList<TextureRegion>();
+
+        // Order of added images is important, first one is the last one that will appear,
+        // and last one is the first one that will appear as full block.
+        switch (value) {
+            case 2:
+                list.add(new TextureRegion(new Texture("blocks/block1_2.png")));
+                list.add(new TextureRegion(new Texture("blocks/block1_1.png")));
+                return list;
+            case 3:
+                list.add(new TextureRegion(new Texture("blocks/block2_3.png")));
+                list.add(new TextureRegion(new Texture("blocks/block2_2.png")));
+                list.add(new TextureRegion(new Texture("blocks/block2_1.png")));
+                return list;
+            default:
+                list.add(new TextureRegion(new Texture("blocks/block0.png")));
+                return list;
+        }
+    }
+
+    public void hit() {
+        durability -= 1;
+    }
+
+    public boolean isDestroyed() {
+        return durability == 0;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public void reset() {
+        durability = value;
+    }
+
+    @Override
+    public void dispose() {
+        if (sprites != null) {
+            for (TextureRegion region: sprites) {
+                region.getTexture().dispose();
+            }
+            sprites = null;
+        }
     }
 }
