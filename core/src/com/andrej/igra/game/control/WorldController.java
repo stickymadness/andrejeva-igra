@@ -20,17 +20,20 @@ public class WorldController {
     private boolean isRunning;
 
     public WorldController() {
+        initWorld();
+
         isRunning = true;
         shared = this;
         hasStarted = false;
-        box2dWorld = new World(new Vector2(), true);
         level = new Level(box2dWorld);
     }
 
     public void update(float deltaTime) {
 
-        if (level.isGameOver() || level.isGameComplete()) {
+        if (level.isGameOver()) {
             restart();
+        } else if (level.isGameComplete()) {
+            nextLevel();
         }
 
         if (isRunning) {
@@ -61,6 +64,23 @@ public class WorldController {
         time = 0;
         hasStarted = false;
         level.restart();
+    }
+
+    private void nextLevel() {
+        initWorld();
+
+        level = new Level(box2dWorld);
+        isRunning = true;
+        hasStarted = false;
+    }
+
+    private void initWorld() {
+        if (box2dWorld != null) {
+            box2dWorld.dispose();
+            box2dWorld = null;
+        }
+
+        box2dWorld = new World(new Vector2(), true);
     }
 
     public void pause() {

@@ -5,11 +5,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.World;
+
+import javax.xml.bind.ValidationEventLocator;
 
 /**
  * Created by Tomaž Ravljen, Drugi Vid d.o.o.
@@ -18,6 +21,7 @@ import com.badlogic.gdx.physics.box2d.World;
 public class Ball extends AbstractGameObject {
     private static final String TAG = Ball.class.getSimpleName();
     private static final float MAX_BOUNCE_DELAY = .1f;
+    private static final float MIN_BOUNCE_DELAY = .05f;
     private static final float ROTATION_SPEED = 720f;
 
     public Vector2 terminalVelocity;
@@ -29,7 +33,7 @@ public class Ball extends AbstractGameObject {
 
     public Ball() {
         sprite = new TextureRegion(new Texture("ball.png"));
-        terminalVelocity = new Vector2(20f, 20f);
+        terminalVelocity = new Vector2(25f, 25f);
         dimension.set(2.5f, 2.5f);
         origin.set(dimension.x / 2, dimension.y / 2);
         bodyPosition = new Vector2();
@@ -94,12 +98,38 @@ public class Ball extends AbstractGameObject {
 
     public void bounceHorizontal() {
         invertHorizontalVelocity();
+        bounceDelay = MIN_BOUNCE_DELAY;
     }
 
     public void bounceFrom(Block block) {
         if (!canBounce()) {
             return;
         }
+
+//        float relativeIntersectX = (block.position.x + block.dimension.x / 2) - getCenter().x;
+//        float normalizedRelativeIntersectionX = relativeIntersectX / (block.dimension.x / 2);
+//
+//        float relativeIntersectY = block.getCenter().y - body.getWorldCenter().y;
+//        float normalizedRelativeIntersectionY = relativeIntersectY / (block.dimension.y / 2);
+
+//        velocity.x = terminalVelocity.x * normalizedRelativeIntersectionX * -1;
+//        velocity.y = terminalVelocity.y * normalizedRelativeIntersectionY * -1;
+
+//        boolean bounceX = Math.abs(relativeIntersectX) > .9f;
+//        boolean bounceY = Math.abs(relativeIntersectY) > .9f;
+//
+//        Gdx.app.error(TAG, "bounceX: " + bounceX + ", bounceY: " + bounceY);
+//        if (getCenter().y > block.position.y && getCenter().y < block.position.y + block.dimension.y) {
+//            if (bounceX) {
+//                velocity.x *= -1;
+//            }
+//        }
+//
+//        if (getCenter().x > block.position.x && getCenter().x < block.position.x + block.dimension.x) {
+//            if (bounceY) {
+//                velocity.y *= -1;
+//            }
+//        }
 
         float intersectionX = 0;
         float intersectionY = 0;
@@ -112,8 +142,8 @@ public class Ball extends AbstractGameObject {
             intersectionY = Math.abs(block.position.y - position.y);
         }
 
-        Gdx.app.error(TAG, "intersectionX: " + intersectionX);
-        Gdx.app.error(TAG, "intersectionY: " + intersectionY);
+//        Gdx.app.error(TAG, "intersectionX: " + intersectionX);
+//        Gdx.app.error(TAG, "intersectionY: " + intersectionY);
 
         if (intersectionX < intersectionY) {
             bounceVertical();
@@ -121,7 +151,7 @@ public class Ball extends AbstractGameObject {
             bounceHorizontal();
         }
 
-        resetBounce();
+        bounceDelay = MAX_BOUNCE_DELAY;
     }
 
     public void bounceVertical() {
@@ -145,10 +175,6 @@ public class Ball extends AbstractGameObject {
 
     private void invertHorizontalVelocity() {
         velocity.x *= -1;
-    }
-
-    private void resetBounce() {
-        bounceDelay = MAX_BOUNCE_DELAY;
     }
 
     private boolean canBounce() {

@@ -59,7 +59,7 @@ public class WorldListener implements ContactListener {
 
             if (obj2 instanceof Block || obj1 instanceof Block) {
                 Block block = (Block)(obj1 instanceof Block ? obj1 : obj2);
-                worldController.level.destroy(block);
+                worldController.level.hit(block);
                 worldController.level.ball.bounceFrom(block);
             } else if (obj1 instanceof PlayerPad || obj2 instanceof PlayerPad) {
                 worldController.level.ball.bounceFrom(worldController.level.playerPad);

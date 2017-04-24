@@ -5,6 +5,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import java.util.ArrayList;
+
 /**
  * Created by Tomaž Ravljen, Drugi Vid d.o.o.
  */
@@ -18,6 +20,12 @@ public class Utils {
 
     public static boolean checkCollision(AbstractGameObject obj1, AbstractGameObject obj2) {
         return obj1.getBounds().overlaps(obj2.getBounds());
+    }
+
+    public static void setLinearFilter(ArrayList<TextureRegion> regionList) {
+        for (TextureRegion reg: regionList) {
+            setLinearFilter(reg);
+        }
     }
 
     public static void setLinearFilter(TextureRegion reg) {

@@ -23,18 +23,18 @@ import java.util.ArrayList;
 
 public class Level {
 
-    private enum BLOCK_TYPE {
+    private enum OBJECT_TYPE {
         EMPTY(0, 0, 0),
         WALL(255, 87, 0),
         BLOCK(255, 180, 0);
 
         private int color;
 
-        BLOCK_TYPE(int r, int g, int b) {
+        OBJECT_TYPE(int r, int g, int b) {
             color = r << 24 | g << 16 | b << 8 | 0xff;
         }
 
-        public static BLOCK_TYPE getType(int color) {
+        public static OBJECT_TYPE getType(int color) {
 
             if (color == WALL.color) {
                 return WALL;
@@ -125,36 +125,45 @@ public class Level {
     private void load(String filePath) {
         Pixmap pixmap = new Pixmap(Gdx.files.internal(filePath));
 
-        // TODO: Try generating random positions for half of the screen and project horizontally the other half. And remove loading from level file
-
         float ratioX = (Constants.GAME_WIDTH) / pixmap.getWidth();
-//        float ratioY = (Utils.getGameHeight()) / pixmap.getHeight();
-        ArrayList<Vector2> possibleBlockList = new ArrayList<Vector2>();
         float width = ratioX;
+
+        ArrayList<Vector2> possibleBlockList = new ArrayList<Vector2>();
 
         for (int x = 0; x < pixmap.getWidth() / 2; x++) {
             for (int y = 0; y < pixmap.getHeight(); y++) {
                 int color = pixmap.getPixel(x, y);
-                BLOCK_TYPE blockType = BLOCK_TYPE.getType(color);
+                OBJECT_TYPE blockType = OBJECT_TYPE.getType(color);
 
                 float invertedY = Utils.getGameHeight() - (y + 2.4f) * 2f;
-                if (BLOCK_TYPE.BLOCK == blockType) {
+                if (OBJECT_TYPE.BLOCK == blockType) {
                     possibleBlockList.add(new Vector2(x * ratioX, invertedY));
-//                    createBlock(x * ratioX, invertedY, ratioX);
                 }
             }
         }
 
         for (Vector2 position: possibleBlockList) {
-            if (MathUtils.randomBoolean()) {
-                createBlock(position.x, position.y, width);
-                createBlock(Constants.GAME_WIDTH - position.x - width, position.y, width);
+
+            if (MathUtils.randomBoolean(0.66f)) {
+
+                int blockDurability = 1; // 1 hit default
+                if (MathUtils.randomBoolean(.2f)) {
+                    // Hardest block - 3 hits
+                    blockDurability = 3;
+                } else if (MathUtils.randomBoolean(.5f)) {
+                    // Medium block - 2 hits
+                    blockDurability = 2;
+                }
+
+                createBlock(position.x, position.y, width, blockDurability);
+                return;
+//                createBlock(Constants.GAME_WIDTH - position.x - width, position.y, width, blockDurability);
             }
         }
     }
 
-    private void createBlock(float x, float y, float width) {
-        Block block = new Block();
+    private void createBlock(float x, float y, float width, int blockDurability) {
+        Block block = new Block(blockDurability);
         block.dimension.x = width;
         block.position.set(x, y);
         block.initBody(world);
@@ -182,6 +191,7 @@ public class Level {
         ball.position.set(playerPad.position.x + playerPad.dimension.x / 2 - ball.dimension.x / 2,
                 playerPad.position.y + playerPad.dimension.y);
         ball.velocity.set(0, 0);
+        ball.initBody(world);
     }
 
     private void respawnBlocks() {
@@ -190,6 +200,7 @@ public class Level {
 
         for (Block block: blocks) {
             block.initBody(world);
+            block.reset();
         }
     }
 
@@ -199,18 +210,22 @@ public class Level {
         }
 
         for (Block block: destroyBlocks) {
-            world.destroyBody(block.body);
-            blocks.remove(block);
 
-            block.body.setUserData(null);
-            block.body = null;
-            WorldController.shared.score++;
+            if (block.isDestroyed()) {
+                world.destroyBody(block.body);
+                blocks.remove(block);
+
+                block.body.setUserData(null);
+                block.body = null;
+                WorldController.shared.score += block.getValue();
+            }
         }
 
         destroyBlocks.clear();
     }
 
-    void destroy(Block block) {
+    void hit(Block block) {
+        block.hit();
         destroyBlocks.add(block);
     }
 
